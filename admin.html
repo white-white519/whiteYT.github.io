@@ -5,104 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Admin_Center.sys | БЕЛЫЙ OS</title>
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <!-- Подключаем Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <div id="login-screen" class="win-window win-load-anim" style="max-width:480px;margin:6rem auto 0;">
+<div id="login-screen" class="win-window win-load-anim" style="max-width:480px;margin:6rem auto 0;">
+    <div class="win-title-bar">
+        <div class="win-title-text">Auth_Required.sys</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn close-btn" title="На главную" onclick="location.href='index.html'">X</button>
+        </div>
+    </div>
+    <div class="win-window-body">
+        <h2 style="margin-bottom:10px;">🔒 Требуется аутентификация</h2>
+        <p style="font-size:13px;line-height:1.5;margin-bottom:15px;">Введите пароль администратора.</p>
+        <form id="authForm" class="upload-form" novalidate>
+            <input type="password" id="authPass" class="win-input" placeholder="Пароль" required>
+            <button type="submit" class="win-btn submit-btn">Войти</button>
+            <a href="index.html" class="win-btn" style="text-decoration:none;">← Назад на главную</a>
+            <div id="authError" class="form-error" style="display:none;" role="alert"></div>
+        </form>
+    </div>
+</div>
+
+<div id="admin-panel" style="display:none;">
+    <main class="win-window admin-window win-load-anim">
         <div class="win-title-bar">
-            <div class="win-title-text">Auth_Required.sys</div>
+            <div class="win-title-text">Admin_Moderator_Console.exe</div>
             <div class="win-title-controls">
-                <button class="win-control-btn close-btn" title="На главную" onclick="location.href='index.html'">X</button>
+                <button class="win-control-btn close-btn" title="Выйти" onclick="logout()">X</button>
             </div>
         </div>
         <div class="win-window-body">
-            <h2 style="margin-bottom:10px;">🔒 Требуется аутентификация</h2>
-            <p style="font-size:13px;line-height:1.5;margin-bottom:15px;">Введите пароль администратора.</p>
-            <form id="authForm" class="upload-form" novalidate>
-                <input type="password" id="authPass" class="win-input" placeholder="Пароль" required>
-                <button type="submit" class="win-btn submit-btn">Войти</button>
-                <a href="index.html" class="win-btn" style="text-decoration:none;">← Назад на главную</a>
-                <div id="authError" class="form-error" style="display:none;" role="alert"></div>
-            </form>
+
+            <div class="admin-stats">
+                <div class="win-inset admin-stat">
+                    <div class="admin-stat-num" id="statQueue">0</div>
+                    <div class="admin-stat-label">В очереди</div>
+                </div>
+                <div class="win-inset admin-stat">
+                    <div class="admin-stat-num" id="statPortfolio">0</div>
+                    <div class="admin-stat-label">Моё портфолио</div>
+                </div>
+                <div class="win-inset admin-stat">
+                    <div class="admin-stat-num" id="statApproved">0</div>
+                    <div class="admin-stat-label">Одобрено</div>
+                </div>
+            </div>
+
+            <div class="admin-tabs" role="tablist">
+                <button class="win-btn active" data-tab="moderation" onclick="switchTab('moderation', this)" role="tab">
+                    📥 Модерация <span class="tab-badge" id="badge-mod">0</span>
+                </button>
+                <button class="win-btn" data-tab="portfolio" onclick="switchTab('portfolio', this)" role="tab">
+                    🎨 Мои работы <span class="tab-badge" id="badge-port">0</span>
+                </button>
+                <button class="win-btn" data-tab="approved" onclick="switchTab('approved', this)" role="tab">
+                    ✔ Одобрено <span class="tab-badge" id="badge-appr">0</span>
+                </button>
+            </div>
+
+            <section id="tab-moderation" role="tabpanel">
+                <h2 style="margin-bottom:15px;">📥 Входящие арты от подписчиков</h2>
+                <div id="queue-container"></div>
+            </section>
+
+            <section id="tab-portfolio" style="display:none;" role="tabpanel">
+                <h2 style="margin-bottom:15px;">🎨 Моё портфолио</h2>
+                <form id="portfolioForm" class="win-inset portfolio-admin-upload" novalidate>
+                    <input type="text" id="pTitle" class="win-input" placeholder="Название работы" required maxlength="80">
+                    <label for="pFile" class="win-btn file-label" id="pFileLabel" tabindex="0" role="button">📎 Выбрать файл</label>
+                    <input id="pFile" type="file" accept="image/*" required>
+                    <button type="submit" class="win-btn submit-btn">Добавить в портфолио</button>
+                    <div id="pFormError" class="form-error" style="display:none;" role="alert"></div>
+                </form>
+            </section>
+
+            <section id="tab-approved" style="display:none;" role="tabpanel">
+                <h2 style="margin-bottom:15px;">✔ Одобренные работы</h2>
+                <div id="approved-list"></div>
+            </section>
+
+            <div style="margin-top:2rem;text-align:center;">
+                <a href="index.html" class="win-btn" style="text-decoration:none;display:inline-block;">← Закрыть терминал</a>
+            </div>
         </div>
-    </div>
+    </main>
+</div>
 
-    <div id="admin-panel" style="display:none;">
-        <main class="win-window admin-window win-load-anim">
-            <div class="win-title-bar">
-                <div class="win-title-text">Admin_Moderator_Console.exe</div>
-                <div class="win-title-controls">
-                    <button class="win-control-btn close-btn" title="Выйти" onclick="logout()">X</button>
-                </div>
-            </div>
-            <div class="win-window-body">
-
-                <div class="admin-stats">
-                    <div class="win-inset admin-stat">
-                        <div class="admin-stat-num" id="statQueue">0</div>
-                        <div class="admin-stat-label">В очереди</div>
-                    </div>
-                    <div class="win-inset admin-stat">
-                        <div class="admin-stat-num" id="statPortfolio">0</div>
-                        <div class="admin-stat-label">Моё портфолио</div>
-                    </div>
-                    <div class="win-inset admin-stat">
-                        <div class="admin-stat-num" id="statApproved">0</div>
-                        <div class="admin-stat-label">Одобрено</div>
-                    </div>
-                </div>
-
-                <div class="admin-tabs" role="tablist">
-                    <button class="win-btn active" data-tab="moderation" onclick="switchTab('moderation', this)" role="tab">
-                        📥 Модерация <span class="tab-badge" id="badge-mod">0</span>
-                    </button>
-                    <button class="win-btn" data-tab="portfolio" onclick="switchTab('portfolio', this)" role="tab">
-                        🎨 Мои работы <span class="tab-badge" id="badge-port">0</span>
-                    </button>
-                    <button class="win-btn" data-tab="approved" onclick="switchTab('approved', this)" role="tab">
-                        ✔ Одобрено <span class="tab-badge" id="badge-appr">0</span>
-                    </button>
-                </div>
-
-                <section id="tab-moderation" role="tabpanel">
-                    <h2 style="margin-bottom:15px;">📥 Входящие арты от подписчиков</h2>
-                    <div id="queue-container"></div>
-                </section>
-
-                <section id="tab-portfolio" style="display:none;" role="tabpanel">
-                    <h2 style="margin-bottom:15px;">🎨 Моё портфолио</h2>
-                    <form id="portfolioForm" class="win-inset portfolio-admin-upload" novalidate>
-                        <input type="text" id="pTitle" class="win-input" placeholder="Название работы" required maxlength="80">
-                        <label for="pFile" class="win-btn file-label" id="pFileLabel" tabindex="0" role="button">📎 Выбрать файл</label>
-                        <input id="pFile" type="file" accept="image/*" required>
-                        <button type="submit" class="win-btn submit-btn">Добавить в портфолио</button>
-                        <div id="pFormError" class="form-error" style="display:none;" role="alert"></div>
-                    </form>
-                </section>
-
-                <section id="tab-approved" style="display:none;" role="tabpanel">
-                    <h2 style="margin-bottom:15px;">✔ Одобренные работы</h2>
-                    <div id="approved-list"></div>
-                </section>
-
-                <div style="margin-top:2rem;text-align:center;">
-                    <a href="index.html" class="win-btn" style="text-decoration:none;display:inline-block;">← Закрыть терминал</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
+<script>
     /* ============================================================
-       ⚙️ НАСТРОЙКИ SUPABASE (ОБЯЗАТЕЛЬНО ЗАМЕНИ КЛЮЧ!)
+       ⚙️ НАСТРОЙКИ SUPABASE (ПЕРЕИМЕНОВАНО В supabaseClient)
     ============================================================ */
     const SUPABASE_URL = 'https://iqyoopklaeaeiltgdmqiz.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeW9vcGtsYWVlaWx0Z2RtaXF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTI2NjksImV4cCI6MjEwODc4ODY2OX0.HDTMx-fNBaWT-BDpxmyCXLmQE8J6V4wpiaxWcdcnZ2U'; // <--- ЗАМЕНИ ЭТО НА СВОЙ ANON KEY
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const ADMIN_PASSWORD = 'whiteYT2026';
     const AUTH_KEY = 'whiteyt-admin-auth';
 
@@ -113,7 +114,7 @@
         if (!iso) return '';
         try { return new Date(iso).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; }
     }
-    
+
     // Сжатие картинки
     const MAX_FILE_SIZE = 8 * 1024 * 1024;
     const MAX_DIMENSION = 1024;
@@ -158,7 +159,7 @@
 
     function isAuthed() { try { return sessionStorage.getItem(AUTH_KEY) === '1'; } catch (e) { return false; } }
     function setAuthed(flag) { try { flag ? sessionStorage.setItem(AUTH_KEY, '1') : sessionStorage.removeItem(AUTH_KEY); } catch (e) {} }
-    
+
     function showLogin() {
         document.getElementById('login-screen').style.display = '';
         document.getElementById('admin-panel').style.display = 'none';
@@ -194,8 +195,8 @@
     }
 
     async function refreshAll() {
-        const { data: queue, error: qErr } = await supabase.from('renders').select('*').eq('status', 'pending').order('created_at', { ascending: true });
-        const { data: approved, error: aErr } = await supabase.from('renders').select('*').eq('status', 'approved').order('created_at', { ascending: false });
+        const { data: queue, error: qErr } = await supabaseClient.from('renders').select('*').eq('status', 'pending').order('created_at', { ascending: true });
+        const { data: approved, error: aErr } = await supabaseClient.from('renders').select('*').eq('status', 'approved').order('created_at', { ascending: false });
 
         if (qErr || aErr) { console.error(qErr || aErr); return; }
 
@@ -246,17 +247,17 @@
     }
 
     async function approve(id) {
-        const { error } = await supabase.from('renders').update({ status: 'approved' }).eq('id', id);
+        const { error } = await supabaseClient.from('renders').update({ status: 'approved' }).eq('id', id);
         if (error) alert('Ошибка: ' + error.message); else refreshAll();
     }
     async function reject(id) {
         if (!confirm('Удалить заявку?')) return;
-        const { error } = await supabase.from('renders').delete().eq('id', id);
+        const { error } = await supabaseClient.from('renders').delete().eq('id', id);
         if (error) alert('Ошибка: ' + error.message); else refreshAll();
     }
     async function removeApproved(id) {
         if (!confirm('Убрать с сайта?')) return;
-        const { error } = await supabase.from('renders').delete().eq('id', id);
+        const { error } = await supabaseClient.from('renders').delete().eq('id', id);
         if (error) alert('Ошибка: ' + error.message); else refreshAll();
     }
 
@@ -279,12 +280,12 @@
             const blob = await (await fetch(compressedDataUrl)).blob();
             const filePath = `portfolio/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
 
-            const { error: uploadError } = await supabase.storage.from('renders').upload(filePath, blob, { contentType: 'image/webp' });
+            const { error: uploadError } = await supabaseClient.storage.from('renders').upload(filePath, blob, { contentType: 'image/webp' });
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage.from('renders').getPublicUrl(filePath);
+            const { data: { publicUrl } } = supabaseClient.storage.from('renders').getPublicUrl(filePath);
 
-            const { error: dbError } = await supabase.from('renders').insert([{ name: 'БЕЛЫЙ', title, image_url: publicUrl, status: 'approved' }]);
+            const { error: dbError } = await supabaseClient.from('renders').insert([{ name: 'БЕЛЫЙ', title, image_url: publicUrl, status: 'approved' }]);
             if (dbError) throw dbError;
 
             e.target.reset();
@@ -310,6 +311,6 @@
             pLabel.textContent = pFile.files[0] ? '📎 ' + pFile.files[0].name : '📎 Выбрать файл';
         });
     });
-    </script>
+</script>
 </body>
 </html>

@@ -5,196 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Портфолио БЕЛОГО (whiteYT) — 3D-художника, рендермейкера и Java-моддера по Minecraft. Ретро-интерфейс в стиле Windows 95.">
     <title>БЕЛЫЙ | Operating System v95</title>
+    <!-- Убираем ошибку favicon.ico -->
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <!-- Подключаем Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- ================= THEME BAR ================= -->
-    <div class="theme-bar win-window win-load-anim">
-        <div class="win-title-bar"><div class="win-title-text">Shell_Manager.exe</div></div>
-        <div class="theme-buttons">
-            <button class="win-btn active" data-theme-name="win95" aria-pressed="true"  onclick="setTheme('win95', this)">📟 Windows 95</button>
-            <button class="win-btn"        data-theme-name="dark"  aria-pressed="false" onclick="setTheme('dark',  this)">🌌 Dark Neon</button>
-            <button class="win-btn"        data-theme-name="arch"  aria-pressed="false" onclick="setTheme('arch',  this)">⌨️ Arch Terminal</button>
+<!-- ================= THEME BAR ================= -->
+<div class="theme-bar win-window win-load-anim">
+    <div class="win-title-bar"><div class="win-title-text">Shell_Manager.exe</div></div>
+    <div class="theme-buttons">
+        <button class="win-btn active" data-theme-name="win95" aria-pressed="true"  onclick="setTheme('win95', this)">📟 Windows 95</button>
+        <button class="win-btn"        data-theme-name="dark"  aria-pressed="false" onclick="setTheme('dark',  this)">🌌 Dark Neon</button>
+        <button class="win-btn"        data-theme-name="arch"  aria-pressed="false" onclick="setTheme('arch',  this)">⌨️ Arch Terminal</button>
+    </div>
+</div>
+
+<!-- ================= HERO ================= -->
+<main class="win-window main-window win-load-anim" style="--anim-delay:.1s;" data-window-title="БЕЛЫЙ.exe">
+    <div class="win-title-bar">
+        <div class="win-title-text">C:\Windows\System32\БЕЛЫЙ.exe</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn" title="Развернуть">🗖</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
         </div>
     </div>
+    <div class="win-window-body hero-container">
+        <div class="hero-text">
+            <p class="win-subtitle">✦ 3D-художник · Рендермейкер · Java-моддер ✦</p>
+            <h1>Привет, я БЕЛЫЙ 👋</h1>
+            <p class="win-desc">3D-художник и рендермейкер по Майнкрафту. Делаю крутые рендеры, пишу Java-моды, снимаю видео и стримлю. Добро пожаловать в мою операционную систему!</p>
 
-    <!-- ================= HERO ================= -->
-    <main class="win-window main-window win-load-anim" style="--anim-delay:.1s;" data-window-title="БЕЛЫЙ.exe">
-        <div class="win-title-bar">
-            <div class="win-title-text">C:\Windows\System32\БЕЛЫЙ.exe</div>
-            <div class="win-title-controls">
-                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-                <button class="win-control-btn" title="Развернуть">🗖</button>
-                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
-            </div>
-        </div>
-        <div class="win-window-body hero-container">
-            <div class="hero-text">
-                <p class="win-subtitle">✦ 3D-художник · Рендермейкер · Java-моддер ✦</p>
-                <h1>Привет, я БЕЛЫЙ 👋</h1>
-                <p class="win-desc">3D-художник и рендермейкер по Майнкрафту. Делаю крутые рендеры, пишу Java-моды, снимаю видео и стримлю. Добро пожаловать в мою операционную систему!</p>
-
-                <div class="win-inset user-card">
-                    <div><span class="user-card-key">Ник:</span> БЕЛЫЙ</div>
-                    <div><span class="user-card-key">ДР:</span> 16 января ♑ <em>Козерог</em></div>
-                    <div><span class="user-card-key">Статус:</span> Если не злить — не укушу :3</div>
-                </div>
-
-                <div class="social-grid">
-                    <a href="https://t.me/podvalwhiteq"                target="_blank" rel="noopener noreferrer" class="win-btn social-btn tg">✈️ Telegram-канал</a>
-                    <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" rel="noopener noreferrer" class="win-btn social-btn yt">▶️ YouTube</a>
-                    <a href="https://www.twitch.tv/whiteyt456"         target="_blank" rel="noopener noreferrer" class="win-btn social-btn twitch">🎮 Twitch</a>
-                    <a href="https://boosty.to/white10000"             target="_blank" rel="noopener noreferrer" class="win-btn social-btn boosty">🍜 Boosty (На дошик)</a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <img src="images/skin_main.png" alt="Скин БЕЛОГО" class="pixel-avatar" loading="eager">
-            </div>
-        </div>
-    </main>
-
-    <!-- ================= GITHUB REPOS ================= -->
-    <section class="win-window portfolio-window win-load-anim" style="--anim-delay:.2s;" data-window-title="GitHub_Projects.lnk">
-        <div class="win-title-bar">
-            <div class="win-title-text">A:\GitHub_Projects.lnk</div>
-            <div class="win-title-controls">
-                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-                <button class="win-control-btn" title="Развернуть">🗖</button>
-                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
-            </div>
-        </div>
-        <div class="win-window-body">
-            <h3 style="margin-bottom:15px;">
-                Репозитории на GitHub (@white-white519):
-                <button class="win-btn refresh-gh-btn" onclick="refreshGitHubRepos()" title="Обновить с GitHub">🔄 Обновить</button>
-            </h3>
-            <div class="github-repos-grid" id="github-repos"></div>
-        </div>
-    </section>
-
-    <!-- ================= GALLERY ================= -->
-    <section class="win-window portfolio-window win-load-anim" style="--anim-delay:.4s;" id="gallery-section" data-window-title="Gallery.folder">
-        <div class="win-title-bar">
-            <div class="win-title-text">C:\Graphics\Gallery.folder</div>
-            <div class="win-title-controls">
-                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
-            </div>
-        </div>
-        <div class="win-window-body">
-            <div class="gallery-tabs" role="tablist">
-                <button class="win-btn active" data-gallery-tab="portfolio" role="tab"
-                        onclick="switchGalleryTab('portfolio', this)">
-                    🎨 Работы БЕЛОГО <span class="tab-badge" id="badge-portfolio">0</span>
-                </button>
-                <button class="win-btn" data-gallery-tab="community" role="tab"
-                        onclick="switchGalleryTab('community', this)">
-                    👥 Творчество подписчиков <span class="tab-badge" id="badge-community">0</span>
-                </button>
+            <div class="win-inset user-card">
+                <div><span class="user-card-key">Ник:</span> БЕЛЫЙ</div>
+                <div><span class="user-card-key">ДР:</span> 16 января ♑ <em>Козерог</em></div>
+                <div><span class="user-card-key">Статус:</span> Если не злить — не укушу :3</div>
             </div>
 
-            <div id="gallery-portfolio" role="tabpanel">
-                <div class="portfolio-grid" id="portfolio-gallery"></div>
-                <div class="win-inset empty-state" id="portfolio-empty">
-                    📁 Портфолио пока пустое.<br>
-                    <small>Работы БЕЛОГО появятся здесь совсем скоро.</small>
-                </div>
-            </div>
-
-            <div id="gallery-community" style="display:none;" role="tabpanel">
-                <div class="portfolio-grid" id="approved-gallery"></div>
-                <div class="win-inset empty-state" id="community-empty">
-                    📭 Пока нет одобренных работ от подписчиков.<br>
-                    <small>Отправь свой арт через форму ниже — и он появится здесь после проверки.</small>
-                </div>
+            <div class="social-grid">
+                <a href="https://t.me/podvalwhiteq"                target="_blank" rel="noopener noreferrer" class="win-btn social-btn tg">✈️ Telegram-канал</a>
+                <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" rel="noopener noreferrer" class="win-btn social-btn yt">▶️ YouTube</a>
+                <a href="https://www.twitch.tv/whiteyt456"         target="_blank" rel="noopener noreferrer" class="win-btn social-btn twitch">🎮 Twitch</a>
+                <a href="https://boosty.to/white10000"             target="_blank" rel="noopener noreferrer" class="win-btn social-btn boosty">🍜 Boosty (На дошик)</a>
             </div>
         </div>
-    </section>
-
-    <!-- ================= UPLOAD ================= -->
-    <section class="win-window upload-window win-load-anim" style="--anim-delay:.5s;" data-window-title="Upload_Wizard.exe">
-        <div class="win-title-bar">
-            <div class="win-title-text">Upload_Wizard_v1.0.exe</div>
-            <div class="win-title-controls">
-                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
-            </div>
+        <div class="hero-image">
+            <img src="images/skin_main.png" alt="Скин БЕЛОГО" class="pixel-avatar" loading="eager">
         </div>
-        <div class="win-window-body upload-box">
-            <div class="win-progress-bar" id="winProgress" style="display:none;" aria-hidden="true">
-                <div class="win-progress-fill" id="winProgressFill"></div>
-            </div>
-            <h3>Предложить свой арт на сайт 🎨</h3>
-            <p>Ваш ник попадёт в титры и в категорию «Творчество подписчиков» после проверки БЕЛЫМ.</p>
-            <form id="renderForm" class="upload-form" novalidate>
-                <input type="text" id="authorName" class="win-input" placeholder="Твой игровой ник" required maxlength="40" autocomplete="nickname">
-                <input type="text" id="artTitle"   class="win-input" placeholder="Название рендера" required maxlength="80">
-                <label for="file-upload" class="win-btn file-label" id="file-label" tabindex="0" role="button">📎 Выбрать файл изображения</label>
-                <input id="file-upload" type="file" accept="image/*" required>
-                <button type="submit" class="win-btn submit-btn">Загрузить арт в систему</button>
-                <div id="formError" class="form-error" style="display:none;" role="alert"></div>
-            </form>
-        </div>
-    </section>
-
-    <!-- ================= ARCH TERMINAL ================= -->
-    <section class="win-window arch-terminal-section win-load-anim" id="arch-terminal">
-        <div class="win-title-bar">
-            <div class="win-title-text">user@arch:~ — bash</div>
-            <div class="win-title-controls">
-                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-                <button class="win-control-btn" title="Очистить" onclick="termClear()">🗖</button>
-                <button class="win-control-btn close-btn" title="Выйти (theme win95)" onclick="termRun('exit')">X</button>
-            </div>
-        </div>
-        <div class="win-window-body terminal-body">
-            <div class="terminal-output" id="terminal-output"></div>
-            <div class="terminal-prompt-line">
-                <span class="terminal-prompt" id="terminal-prompt">user@arch:~$</span>
-                <input type="text" id="terminal-input" class="terminal-input"
-                       autocomplete="off" spellcheck="false"
-                       aria-label="Терминал: введите команду">
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= TASKBAR ================= -->
-    <div class="win-taskbar" role="toolbar" aria-label="Панель задач">
-        <button class="win-btn taskbar-start" onclick="restoreAllWindows()" title="Восстановить все окна">🪟 Пуск</button>
-        <div class="taskbar-items" id="taskbarItems"></div>
-        <div class="taskbar-clock" id="taskbarClock" aria-live="off">00:00</div>
     </div>
+</main>
 
-    <footer class="site-footer">
-        <p>БЕЛЫЙ OS [Version 95.2026.10]
-            <a href="admin.html" title="Только для БЕЛОГО" aria-label="Админ-панель">•</a>
-        </p>
-    </footer>
+<!-- ================= GITHUB REPOS ================= -->
+<section class="win-window portfolio-window win-load-anim" style="--anim-delay:.2s;" data-window-title="GitHub_Projects.lnk">
+    <div class="win-title-bar">
+        <div class="win-title-text">A:\GitHub_Projects.lnk</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn" title="Развернуть">🗖</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+        </div>
+    </div>
+    <div class="win-window-body">
+        <h3 style="margin-bottom:15px;">
+            Репозитории на GitHub (@white-white519):
+            <button class="win-btn refresh-gh-btn" onclick="refreshGitHubRepos()" title="Обновить с GitHub">🔄 Обновить</button>
+        </h3>
+        <div class="github-repos-grid" id="github-repos"></div>
+    </div>
+</section>
 
-    <div id="image-modal" class="modal-overlay" style="display:none;">
-        <div class="win-window modal-window">
-            <div class="win-title-bar">
-                <div class="win-title-text" id="modalTitle">Preview.exe</div>
-                <div class="win-title-controls">
-                    <button class="win-control-btn close-btn" onclick="closeModal()">X</button>
-                </div>
+<!-- ================= GALLERY ================= -->
+<section class="win-window portfolio-window win-load-anim" style="--anim-delay:.4s;" id="gallery-section" data-window-title="Gallery.folder">
+    <div class="win-title-bar">
+        <div class="win-title-text">C:\Graphics\Gallery.folder</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+        </div>
+    </div>
+    <div class="win-window-body">
+        <div class="gallery-tabs" role="tablist">
+            <button class="win-btn active" data-gallery-tab="portfolio" role="tab"
+                    onclick="switchGalleryTab('portfolio', this)">
+                🎨 Работы БЕЛОГО <span class="tab-badge" id="badge-portfolio">0</span>
+            </button>
+            <button class="win-btn" data-gallery-tab="community" role="tab"
+                    onclick="switchGalleryTab('community', this)">
+                👥 Творчество подписчиков <span class="tab-badge" id="badge-community">0</span>
+            </button>
+        </div>
+
+        <div id="gallery-portfolio" role="tabpanel">
+            <div class="portfolio-grid" id="portfolio-gallery"></div>
+            <div class="win-inset empty-state" id="portfolio-empty">
+                📁 Портфолио пока пустое.<br>
+                <small>Работы БЕЛОГО появятся здесь совсем скоро.</small>
             </div>
-            <div class="win-window-body modal-body">
-                <img id="modalImage" src="" alt="">
+        </div>
+
+        <div id="gallery-community" style="display:none;" role="tabpanel">
+            <div class="portfolio-grid" id="approved-gallery"></div>
+            <div class="win-inset empty-state" id="community-empty">
+                📭 Пока нет одобренных работ от подписчиков.<br>
+                <small>Отправь свой арт через форму ниже — и он появится здесь после проверки.</small>
             </div>
         </div>
     </div>
+</section>
 
-    <script>
+<!-- ================= UPLOAD ================= -->
+<section class="win-window upload-window win-load-anim" style="--anim-delay:.5s;" data-window-title="Upload_Wizard.exe">
+    <div class="win-title-bar">
+        <div class="win-title-text">Upload_Wizard_v1.0.exe</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+        </div>
+    </div>
+    <div class="win-window-body upload-box">
+        <div class="win-progress-bar" id="winProgress" style="display:none;" aria-hidden="true">
+            <div class="win-progress-fill" id="winProgressFill"></div>
+        </div>
+        <h3>Предложить свой арт на сайт 🎨</h3>
+        <p>Ваш ник попадёт в титры и в категорию «Творчество подписчиков» после проверки БЕЛЫМ.</p>
+        <form id="renderForm" class="upload-form" novalidate>
+            <input type="text" id="authorName" class="win-input" placeholder="Твой игровой ник" required maxlength="40" autocomplete="nickname">
+            <input type="text" id="artTitle"   class="win-input" placeholder="Название рендера" required maxlength="80">
+            <label for="file-upload" class="win-btn file-label" id="file-label" tabindex="0" role="button">📎 Выбрать файл изображения</label>
+            <input id="file-upload" type="file" accept="image/*" required>
+            <button type="submit" class="win-btn submit-btn">Загрузить арт в систему</button>
+            <div id="formError" class="form-error" style="display:none;" role="alert"></div>
+        </form>
+    </div>
+</section>
+
+<!-- ================= ARCH TERMINAL ================= -->
+<section class="win-window arch-terminal-section win-load-anim" id="arch-terminal">
+    <div class="win-title-bar">
+        <div class="win-title-text">user@arch:~ — bash</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn" title="Очистить" onclick="termClear()">🗖</button>
+            <button class="win-control-btn close-btn" title="Выйти (theme win95)" onclick="termRun('exit')">X</button>
+        </div>
+    </div>
+    <div class="win-window-body terminal-body">
+        <div class="terminal-output" id="terminal-output"></div>
+        <div class="terminal-prompt-line">
+            <span class="terminal-prompt" id="terminal-prompt">user@arch:~$</span>
+            <input type="text" id="terminal-input" class="terminal-input"
+                   autocomplete="off" spellcheck="false"
+                   aria-label="Терминал: введите команду">
+        </div>
+    </div>
+</section>
+
+<!-- ================= TASKBAR ================= -->
+<div class="win-taskbar" role="toolbar" aria-label="Панель задач">
+    <button class="win-btn taskbar-start" onclick="restoreAllWindows()" title="Восстановить все окна">🪟 Пуск</button>
+    <div class="taskbar-items" id="taskbarItems"></div>
+    <div class="taskbar-clock" id="taskbarClock" aria-live="off">00:00</div>
+</div>
+
+<footer class="site-footer">
+    <p>БЕЛЫЙ OS [Version 95.2026.10]
+        <a href="admin.html" title="Только для БЕЛОГО" aria-label="Админ-панель">•</a>
+    </p>
+</footer>
+
+<div id="image-modal" class="modal-overlay" style="display:none;">
+    <div class="win-window modal-window">
+        <div class="win-title-bar">
+            <div class="win-title-text" id="modalTitle">Preview.exe</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn close-btn" onclick="closeModal()">X</button>
+            </div>
+        </div>
+        <div class="win-window-body modal-body">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+</div>
+
+<script>
     /* ============================================================
-       ⚙️ НАСТРОЙКИ SUPABASE (ОБЯЗАТЕЛЬНО ЗАМЕНИ КЛЮЧ!)
+       ⚙️ НАСТРОЙКИ SUPABASE (ПЕРЕИМЕНОВАНО В supabaseClient)
     ============================================================ */
     const SUPABASE_URL = 'https://iqyoopklaeaeiltgdmqiz.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeW9vcGtsYWVlaWx0Z2RtaXF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTI2NjksImV4cCI6MjEwODc4ODY2OX0.HDTMx-fNBaWT-BDpxmyCXLmQE8J6V4wpiaxWcdcnZ2U'; // <--- ЗАМЕНИ ЭТО НА СВОЙ ANON KEY
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     /* ============================================================
        УТИЛИТЫ
@@ -300,7 +302,7 @@
     }
 
     /* ============================================================
-       ОТПРАВКА АРТА В SUPABASE
+       ОТПРАВКА АРТА В SUPABASE (supabaseClient)
     ============================================================ */
     async function handleSubmit(e) {
         e.preventDefault();
@@ -335,18 +337,18 @@
             const blob = await (await fetch(compressedDataUrl)).blob();
             const filePath = `public/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
 
-            const { data: uploadData, error: uploadError } = await supabase.storage
+            const { data: uploadData, error: uploadError } = await supabaseClient.storage
                 .from('renders')
                 .upload(filePath, blob, { contentType: 'image/webp' });
 
             if (uploadError) throw new Error('Ошибка загрузки файла: ' + uploadError.message);
             fill.style.width = '80%';
 
-            const { data: { publicUrl } } = supabase.storage
+            const { data: { publicUrl } } = supabaseClient.storage
                 .from('renders')
                 .getPublicUrl(filePath);
 
-            const { error: dbError } = await supabase
+            const { error: dbError } = await supabaseClient
                 .from('renders')
                 .insert([{ name, title, image_url: publicUrl, status: 'pending' }]);
 
@@ -373,7 +375,7 @@
     }
 
     /* ============================================================
-       ГАЛЕРЕЯ ИЗ SUPABASE
+       ГАЛЕРЕЯ ИЗ SUPABASE (supabaseClient)
     ============================================================ */
     function switchGalleryTab(name, btn) {
         document.querySelectorAll('.gallery-tabs .win-btn').forEach(b => b.classList.remove('active'));
@@ -400,7 +402,7 @@
     }
 
     async function loadGallery() {
-        const { data: allRenders, error } = await supabase
+        const { data: allRenders, error } = await supabaseClient
             .from('renders')
             .select('*')
             .eq('status', 'approved')
@@ -767,6 +769,6 @@
             if (e.key === 'Escape') closeModal();
         });
     });
-    </script>
+</script>
 </body>
 </html>
