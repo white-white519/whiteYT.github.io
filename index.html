@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="win95">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Портфолио БЕЛОГО (whiteYT) — 3D-художника, рендермейкера и Java-моддера по Minecraft. Ретро-интерфейс в стиле Windows 95.">
+    <title>БЕЛЫЙ | Operating System v95</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ================= THEME BAR ================= -->
+    <div class="theme-bar win-window win-load-anim">
+        <div class="win-title-bar"><div class="win-title-text">Shell_Manager.exe</div></div>
+        <div class="theme-buttons">
+            <button class="win-btn active" data-theme-name="win95" aria-pressed="true"  onclick="setTheme('win95', this)">📟 Windows 95</button>
+            <button class="win-btn"        data-theme-name="dark"  aria-pressed="false" onclick="setTheme('dark',  this)">🌌 Dark Neon</button>
+            <button class="win-btn"        data-theme-name="arch"  aria-pressed="false" onclick="setTheme('arch',  this)">⌨️ Arch Terminal</button>
+        </div>
+    </div>
+
+    <!-- ================= HERO ================= -->
+    <main class="win-window main-window win-load-anim" style="--anim-delay:.1s;" data-window-title="БЕЛЫЙ.exe">
+        <div class="win-title-bar">
+            <div class="win-title-text">C:\Windows\System32\БЕЛЫЙ.exe</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+                <button class="win-control-btn" title="Развернуть">🗖</button>
+                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+            </div>
+        </div>
+        <div class="win-window-body hero-container">
+            <div class="hero-text">
+                <p class="win-subtitle">✦ 3D-художник · Рендермейкер · Java-моддер ✦</p>
+                <h1>Привет, я БЕЛЫЙ 👋</h1>
+                <p class="win-desc">3D-художник и рендермейкер по Майнкрафту. Делаю крутые рендеры, пишу Java-моды, снимаю видео и стримлю. Добро пожаловать в мою операционную систему!</p>
+
+                <div class="win-inset user-card">
+                    <div><span class="user-card-key">Ник:</span> БЕЛЫЙ</div>
+                    <div><span class="user-card-key">ДР:</span> 16 января ♑ <em>Козерог</em></div>
+                    <div><span class="user-card-key">Статус:</span> Если не злить — не укушу :3</div>
+                </div>
+
+                <div class="social-grid">
+                    <a href="https://t.me/podvalwhiteq"                target="_blank" rel="noopener noreferrer" class="win-btn social-btn tg">✈️ Telegram-канал</a>
+                    <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" rel="noopener noreferrer" class="win-btn social-btn yt">▶️ YouTube</a>
+                    <a href="https://www.twitch.tv/whiteyt456"         target="_blank" rel="noopener noreferrer" class="win-btn social-btn twitch">🎮 Twitch</a>
+                    <a href="https://boosty.to/white10000"             target="_blank" rel="noopener noreferrer" class="win-btn social-btn boosty">🍜 Boosty (На дошик)</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/skin_main.png" alt="Скин БЕЛОГО" class="pixel-avatar" loading="eager">
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= GITHUB REPOS ================= -->
+    <section class="win-window portfolio-window win-load-anim" style="--anim-delay:.2s;" data-window-title="GitHub_Projects.lnk">
+        <div class="win-title-bar">
+            <div class="win-title-text">A:\GitHub_Projects.lnk</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+                <button class="win-control-btn" title="Развернуть">🗖</button>
+                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+            </div>
+        </div>
+        <div class="win-window-body">
+            <h3 style="margin-bottom:15px;">
+                Репозитории на GitHub (@white-white519):
+                <button class="win-btn refresh-gh-btn" onclick="refreshGitHubRepos()" title="Обновить с GitHub">🔄 Обновить</button>
+            </h3>
+            <div class="github-repos-grid" id="github-repos"></div>
+        </div>
+    </section>
+
+    <!-- ================= GALLERY ================= -->
+    <section class="win-window portfolio-window win-load-anim" style="--anim-delay:.4s;" id="gallery-section" data-window-title="Gallery.folder">
+        <div class="win-title-bar">
+            <div class="win-title-text">C:\Graphics\Gallery.folder</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+            </div>
+        </div>
+        <div class="win-window-body">
+            <div class="gallery-tabs" role="tablist">
+                <button class="win-btn active" data-gallery-tab="portfolio" role="tab"
+                        onclick="switchGalleryTab('portfolio', this)">
+                    🎨 Работы БЕЛОГО <span class="tab-badge" id="badge-portfolio">0</span>
+                </button>
+                <button class="win-btn" data-gallery-tab="community" role="tab"
+                        onclick="switchGalleryTab('community', this)">
+                    👥 Творчество подписчиков <span class="tab-badge" id="badge-community">0</span>
+                </button>
+            </div>
+
+            <div id="gallery-portfolio" role="tabpanel">
+                <div class="portfolio-grid" id="portfolio-gallery"></div>
+                <div class="win-inset empty-state" id="portfolio-empty">
+                    📁 Портфолио пока пустое.<br>
+                    <small>Работы БЕЛОГО появятся здесь совсем скоро.</small>
+                </div>
+            </div>
+
+            <div id="gallery-community" style="display:none;" role="tabpanel">
+                <div class="portfolio-grid" id="approved-gallery"></div>
+                <div class="win-inset empty-state" id="community-empty">
+                    📭 Пока нет одобренных работ от подписчиков.<br>
+                    <small>Отправь свой арт через форму ниже — и он появится здесь после проверки.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= UPLOAD ================= -->
+    <section class="win-window upload-window win-load-anim" style="--anim-delay:.5s;" data-window-title="Upload_Wizard.exe">
+        <div class="win-title-bar">
+            <div class="win-title-text">Upload_Wizard_v1.0.exe</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+                <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+            </div>
+        </div>
+        <div class="win-window-body upload-box">
+            <div class="win-progress-bar" id="winProgress" style="display:none;" aria-hidden="true">
+                <div class="win-progress-fill" id="winProgressFill"></div>
+            </div>
+            <h3>Предложить свой арт на сайт 🎨</h3>
+            <p>Ваш ник попадёт в титры и в категорию «Творчество подписчиков» после проверки БЕЛЫМ.</p>
+            <form id="renderForm" class="upload-form" novalidate>
+                <input type="text" id="authorName" class="win-input" placeholder="Твой игровой ник" required maxlength="40" autocomplete="nickname">
+                <input type="text" id="artTitle"   class="win-input" placeholder="Название рендера" required maxlength="80">
+                <label for="file-upload" class="win-btn file-label" id="file-label" tabindex="0" role="button">📎 Выбрать файл изображения</label>
+                <input id="file-upload" type="file" accept="image/*" required>
+                <button type="submit" class="win-btn submit-btn">Загрузить арт в систему</button>
+                <div id="formError" class="form-error" style="display:none;" role="alert"></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ================= ARCH TERMINAL ================= -->
+    <section class="win-window arch-terminal-section win-load-anim" id="arch-terminal">
+        <div class="win-title-bar">
+            <div class="win-title-text">user@arch:~ — bash</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+                <button class="win-control-btn" title="Очистить" onclick="termClear()">🗖</button>
+                <button class="win-control-btn close-btn" title="Выйти (theme win95)" onclick="termRun('exit')">X</button>
+            </div>
+        </div>
+        <div class="win-window-body terminal-body">
+            <div class="terminal-output" id="terminal-output"></div>
+            <div class="terminal-prompt-line">
+                <span class="terminal-prompt" id="terminal-prompt">user@arch:~$</span>
+                <input type="text" id="terminal-input" class="terminal-input"
+                       autocomplete="off" spellcheck="false"
+                       aria-label="Терминал: введите команду">
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TASKBAR ================= -->
+    <div class="win-taskbar" role="toolbar" aria-label="Панель задач">
+        <button class="win-btn taskbar-start" onclick="restoreAllWindows()" title="Восстановить все окна">🪟 Пуск</button>
+        <div class="taskbar-items" id="taskbarItems"></div>
+        <div class="taskbar-clock" id="taskbarClock" aria-live="off">00:00</div>
+    </div>
+
+    <footer class="site-footer">
+        <p>БЕЛЫЙ OS [Version 95.2026.10]
+            <a href="admin.html" title="Только для БЕЛОГО" aria-label="Админ-панель">•</a>
+        </p>
+    </footer>
+
+    <div id="image-modal" class="modal-overlay" style="display:none;">
+        <div class="win-window modal-window">
+            <div class="win-title-bar">
+                <div class="win-title-text" id="modalTitle">Preview.exe</div>
+                <div class="win-title-controls">
+                    <button class="win-control-btn close-btn" onclick="closeModal()">X</button>
+                </div>
+            </div>
+            <div class="win-window-body modal-body">
+                <img id="modalImage" src="" alt="">
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* ============================================================
+       ⚙️ НАСТРОЙКИ SUPABASE (ОБЯЗАТЕЛЬНО ЗАМЕНИ КЛЮЧ!)
+    ============================================================ */
+    const SUPABASE_URL = 'https://iqyoopklaeaeiltgdmqiz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeW9vcGtsYWVlaWx0Z2RtaXF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTI2NjksImV4cCI6MjEwODc4ODY2OX0.HDTMx-fNBaWT-BDpxmyCXLmQE8J6V4wpiaxWcdcnZ2U'; // <--- ЗАМЕНИ ЭТО НА СВОЙ ANON KEY
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    /* ============================================================
+       УТИЛИТЫ
+    ============================================================ */
+    function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[ch]);
+    }
+    function showError(msg) {
+        const box = document.getElementById('formError');
+        box.textContent = '⚠️ ' + msg;
+        box.style.display = 'block';
+    }
+    function clearError() {
+        const box = document.getElementById('formError');
+        box.style.display = 'none';
+        box.textContent = '';
+    }
+
+    /* ============================================================
+       ТЕМЫ
+    ============================================================ */
+    const THEME_KEY = 'whiteyt-theme';
+    const AVAILABLE_THEMES = ['win95', 'dark', 'arch'];
+
+    function setTheme(name, btn) {
+        if (!AVAILABLE_THEMES.includes(name)) name = 'win95';
+        document.documentElement.setAttribute('data-theme', name);
+        try { localStorage.setItem(THEME_KEY, name); } catch (e) {}
+        document.querySelectorAll('.theme-buttons .win-btn').forEach(b => {
+            const isActive = b.dataset.themeName === name;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        if (name === 'arch') {
+            setTimeout(() => {
+                initTerminal();
+                const ti = document.getElementById('terminal-input');
+                if (ti) ti.focus();
+            }, 50);
+        }
+    }
+    function restoreTheme() {
+        let saved = 'win95';
+        try { saved = localStorage.getItem(THEME_KEY) || 'win95'; } catch (e) {}
+        if (!AVAILABLE_THEMES.includes(saved)) saved = 'win95';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.querySelectorAll('.theme-buttons .win-btn').forEach(b => {
+            const isActive = b.dataset.themeName === saved;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+        if (saved === 'arch') initTerminal();
+    }
+
+    /* ============================================================
+       СЖАТИЕ
+    ============================================================ */
+    const MAX_FILE_SIZE = 8 * 1024 * 1024;
+    const MAX_DIMENSION = 1024;
+    const JPEG_QUALITY  = 0.82;
+
+    function readAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const r = new FileReader();
+            r.onload = () => resolve(r.result);
+            r.onerror = () => reject(new Error('Не удалось прочитать файл'));
+            r.readAsDataURL(file);
+        });
+    }
+    function loadImage(src) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(new Error('Файл не является изображением'));
+            img.src = src;
+        });
+    }
+    async function compressImage(file) {
+        const dataUrl = await readAsDataURL(file);
+        const img = await loadImage(dataUrl);
+        let { width, height } = img;
+        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+            const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+            width  = Math.round(width  * ratio);
+            height = Math.round(height * ratio);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+        let result = canvas.toDataURL('image/webp', JPEG_QUALITY);
+        if (!result.startsWith('data:image/webp')) {
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = '#0f0f13';
+            ctx.fillRect(0, 0, width, height);
+            result = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
+        }
+        return result;
+    }
+
+    /* ============================================================
+       ОТПРАВКА АРТА В SUPABASE
+    ============================================================ */
+    async function handleSubmit(e) {
+        e.preventDefault();
+        clearError();
+
+        const fileInput = document.getElementById('file-upload');
+        const file  = fileInput.files[0];
+        const name  = document.getElementById('authorName').value.trim();
+        const title = document.getElementById('artTitle').value.trim();
+
+        if (!name)  return showError('Укажи свой ник.');
+        if (!title) return showError('Укажи название рендера.');
+        if (!file)  return showError('Выбери файл изображения.');
+        if (!file.type.startsWith('image/')) return showError('Файл должен быть изображением.');
+        if (file.size > MAX_FILE_SIZE) {
+            return showError(`Файл больше ${MAX_FILE_SIZE / 1024 / 1024} МБ. Сожми его и попробуй снова.`);
+        }
+
+        const progress  = document.getElementById('winProgress');
+        const fill      = document.getElementById('winProgressFill');
+        const submitBtn = e.target.querySelector('.submit-btn');
+
+        progress.style.display = 'block';
+        fill.style.width = '10%';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Обработка...';
+
+        try {
+            const compressedDataUrl = await compressImage(file);
+            fill.style.width = '50%';
+
+            const blob = await (await fetch(compressedDataUrl)).blob();
+            const filePath = `public/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('renders')
+                .upload(filePath, blob, { contentType: 'image/webp' });
+
+            if (uploadError) throw new Error('Ошибка загрузки файла: ' + uploadError.message);
+            fill.style.width = '80%';
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('renders')
+                .getPublicUrl(filePath);
+
+            const { error: dbError } = await supabase
+                .from('renders')
+                .insert([{ name, title, image_url: publicUrl, status: 'pending' }]);
+
+            if (dbError) throw new Error('Ошибка сохранения в БД: ' + dbError.message);
+            fill.style.width = '100%';
+
+            setTimeout(() => {
+                progress.style.display = 'none';
+                fill.style.width = '0%';
+                alert('✅ Файл отправлен на модерацию!');
+                e.target.reset();
+                document.getElementById('file-label').textContent = '📎 Выбрать файл изображения';
+                clearError();
+            }, 450);
+        } catch (err) {
+            progress.style.display = 'none';
+            fill.style.width = '0%';
+            showError(err.message || 'Не удалось обработать файл.');
+            console.error(err);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Загрузить арт в систему';
+        }
+    }
+
+    /* ============================================================
+       ГАЛЕРЕЯ ИЗ SUPABASE
+    ============================================================ */
+    function switchGalleryTab(name, btn) {
+        document.querySelectorAll('.gallery-tabs .win-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('gallery-portfolio').style.display = name === 'portfolio' ? '' : 'none';
+        document.getElementById('gallery-community').style.display = name === 'community' ? '' : 'none';
+    }
+
+    function renderGalleryItems(items, authorOverride) {
+        return items.map((item, i) => {
+            const authorHtml = authorOverride
+                ? `<p>🎨 ${escapeHtml(authorOverride)}</p>`
+                : `<p>Автор: ${escapeHtml(item.name || 'Аноним')}</p>`;
+            return `
+                <div class="portfolio-item win-inset" style="--item-i:${i};">
+                    <img src="${item.image_url}" alt="${escapeHtml(item.title)}" loading="lazy">
+                    <div class="item-overlay">
+                        <h3>${escapeHtml(item.title)}</h3>
+                        ${authorHtml}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadGallery() {
+        const { data: allRenders, error } = await supabase
+            .from('renders')
+            .select('*')
+            .eq('status', 'approved')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Ошибка загрузки галереи:', error);
+            return;
+        }
+
+        const portfolio = allRenders.filter(r => r.name === 'БЕЛЫЙ');
+        const approved = allRenders.filter(r => r.name !== 'БЕЛЫЙ');
+
+        const pg = document.getElementById('portfolio-gallery');
+        const pe = document.getElementById('portfolio-empty');
+        document.getElementById('badge-portfolio').textContent = portfolio.length;
+        if (portfolio.length) {
+            pe.style.display = 'none';
+            pg.innerHTML = renderGalleryItems(portfolio, 'БЕЛЫЙ');
+        } else {
+            pe.style.display = '';
+            pg.innerHTML = '';
+        }
+
+        const cg = document.getElementById('approved-gallery');
+        const ce = document.getElementById('community-empty');
+        document.getElementById('badge-community').textContent = approved.length;
+        if (approved.length) {
+            ce.style.display = 'none';
+            cg.innerHTML = renderGalleryItems(approved);
+        } else {
+            ce.style.display = '';
+            cg.innerHTML = '';
+        }
+    }
+
+    /* ============================================================
+       МОДАЛКА
+    ============================================================ */
+    function openModal(title, src) {
+        document.getElementById('modalTitle').textContent = title || 'Preview.exe';
+        document.getElementById('modalImage').src = src;
+        document.getElementById('image-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        document.getElementById('image-modal').style.display = 'none';
+        document.getElementById('modalImage').src = '';
+        document.body.style.overflow = '';
+    }
+
+    /* ============================================================
+       GITHUB API
+    ============================================================ */
+    const GH_USER = 'white-white519';
+    const GH_CACHE_KEY = 'gh-repos-cache-v1';
+    const GH_CACHE_TTL = 60 * 60 * 1000;
+    const PINNED_REPOS = ['Soul_Fracture', 'Idea-app'];
+
+    const LANG_ICONS = {
+        'Java': '☕', 'JavaScript': '⚡', 'TypeScript': '🔷',
+        'HTML': '🌐', 'CSS': '🎨', 'SCSS': '🎨',
+        'Python': '🐍', 'C++': '🔧', 'C': '🔧', 'C#': '🎯',
+        'Rust': '🦀', 'Go': '🐹', 'Kotlin': '🟣', 'Swift': '🕊',
+        'GDScript': '🎮', 'Lua': '🌙', 'Shell': '🐚',
+        'PHP': '🐘', 'Ruby': '💎', 'Vue': '💚', 'Svelte': '🧡',
+        'Batchfile': '📜', 'PowerShell': '💠'
+    };
+
+    const FALLBACK_REPOS = [
+        { name: 'Soul_Fracture',  language: 'Java',       description: 'Мод на выживание в Minecraft...', html_url: '#' },
+        { name: 'Idea-app',       language: 'JavaScript', description: 'Программное обеспечение для стримеров...', html_url: '#' }
+    ];
+
+    function renderRepoCard(repo, i) {
+        const icon = LANG_ICONS[repo.language] || '📦';
+        const desc = repo.description || 'Без описания';
+        const tagHtml = (repo.language ? `<span>${escapeHtml(repo.language)}</span>` : '')
+            + (repo.stargazers_count > 0 ? `<span>⭐ ${repo.stargazers_count}</span>` : '');
+        return `
+            <div class="repo-card win-inset" style="--item-i:${i || 0};">
+                <div class="repo-header"><span class="repo-icon">${icon}</span><h4>${escapeHtml(repo.name)}</h4></div>
+                <p class="repo-desc">${escapeHtml(desc)}</p>
+                <div class="repo-tags">${tagHtml}</div>
+                <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="win-btn repo-link">Открыть код →</a>
+            </div>
+        `;
+    }
+
+    function sortRepos(a, b) {
+        const aPinned = PINNED_REPOS.indexOf(a.name);
+        const bPinned = PINNED_REPOS.indexOf(b.name);
+        if (aPinned !== -1 && bPinned === -1) return -1;
+        if (aPinned === -1 && bPinned !== -1) return 1;
+        if (aPinned !== -1 && bPinned !== -1) return aPinned - bPinned;
+        return (b.stargazers_count - a.stargazers_count) || (new Date(b.updated_at) - new Date(a.updated_at));
+    }
+
+    async function loadGitHubRepos() {
+        const container = document.getElementById('github-repos');
+        if (!container) return;
+        try {
+            const cached = JSON.parse(sessionStorage.getItem(GH_CACHE_KEY) || 'null');
+            if (cached && (Date.now() - cached.ts) < GH_CACHE_TTL && cached.html) {
+                container.innerHTML = cached.html;
+                return;
+            }
+        } catch (e) {}
+        container.innerHTML = Array(4).fill(0).map(() => '<div class="repo-card skeleton win-inset"></div>').join('');
+        try {
+            const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`);
+            if (!res.ok) throw new Error('GitHub API Error');
+            const repos = await res.json();
+            const filtered = repos.filter(r => !r.fork && !r.archived).sort(sortRepos);
+            if (!filtered.length) throw new Error('Empty list');
+            const html = filtered.map((r, i) => renderRepoCard(r, i)).join('');
+            container.innerHTML = html;
+            try { sessionStorage.setItem(GH_CACHE_KEY, JSON.stringify({ ts: Date.now(), html })); } catch (e) {}
+        } catch (err) {
+            container.innerHTML = FALLBACK_REPOS.map((r, i) => renderRepoCard(r, i)).join('');
+        }
+    }
+    function refreshGitHubRepos() {
+        try { sessionStorage.removeItem(GH_CACHE_KEY); } catch (e) {}
+        loadGitHubRepos();
+    }
+
+    /* ============================================================
+       ARCH TERMINAL
+    ============================================================ */
+    let termPath = '/';
+    const termHistory = [];
+    let termHistoryIdx = -1;
+    let terminalInitialized = false;
+    const TERM_DIRS = ['/', '/portfolio', '/repos', '/upload'];
+    const TERM_FILES = {
+        '/bio.txt': `Имя: БЕЛЫЙ\nДР: 16 января (Козерог ♑)\nРоль: 3D-художник, рендермейкер, Java-моддер\nСтатус: Если не злить — не укушу :3`,
+        '/contacts.txt': `Telegram : https://t.me/podvalwhiteq\nYouTube  : https://www.youtube.com/@HospitalwhiteYT\nTwitch   : https://www.twitch.tv/whiteyt456\nBoosty   : https://boosty.to/white10000`,
+        '/README.md': `# БЕЛЫЙ OS · Arch Terminal\n\nЭто пасхалка. Но команды работают!\nПопробуй: ls, cd, cat bio.txt, neofetch`,
+        '/upload/submit.sh': `#!/bin/bash\necho "Прокрути страницу вверх и найди Upload_Wizard.exe"\n`
+    };
+
+    function termPrint(text, cls) {
+        const out = document.getElementById('terminal-output');
+        if (!out) return;
+        const line = document.createElement('div');
+        if (cls) line.className = 't-' + cls;
+        line.textContent = text;
+        out.appendChild(line);
+        out.scrollTop = out.scrollHeight;
+    }
+    function termPrintHTML(html) {
+        const out = document.getElementById('terminal-output');
+        if (!out) return;
+        const line = document.createElement('div');
+        line.innerHTML = html;
+        out.appendChild(line);
+        out.scrollTop = out.scrollHeight;
+    }
+    function termClear() {
+        const out = document.getElementById('terminal-output');
+        if (out) out.innerHTML = '';
+    }
+    function updateTermPrompt() {
+        const el = document.getElementById('terminal-prompt');
+        if (!el) return;
+        const displayPath = termPath === '/' ? '~' : '~' + termPath;
+        el.textContent = `user@arch:${displayPath}$`;
+    }
+    function printBanner() {
+        termPrint('');
+        termPrint('  ╦ ╦╦╔╦╗╔═╗╦ ╦╔╦╗', 'blue');
+        termPrint('  ║║║║ ║ ║╣ ╚╦╝ ║ ', 'blue');
+        termPrint('  ╚╩╝╩ ╩ ╚═╝ ╩  ╩ ', 'blue');
+        termPrint('');
+        termPrint('  БЕЛЫЙ OS · Arch Terminal v1.0', 'green');
+        termPrint('  Type "help" for commands.', 'muted');
+        termPrint('');
+    }
+    function initTerminal() {
+        if (terminalInitialized) return;
+        terminalInitialized = true;
+        const input = document.getElementById('terminal-input');
+        if (!input) return;
+        input.addEventListener('keydown', handleTermKey);
+        printBanner();
+        updateTermPrompt();
+    }
+    function handleTermKey(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const line = e.target.value;
+            e.target.value = '';
+            termRun(line);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (termHistoryIdx === -1) termHistoryIdx = termHistory.length;
+            if (termHistoryIdx > 0) termHistoryIdx--;
+            e.target.value = termHistory[termHistoryIdx] || '';
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (termHistoryIdx < termHistory.length - 1) termHistoryIdx++;
+            else termHistoryIdx = termHistory.length;
+            e.target.value = termHistory[termHistoryIdx] || '';
+        } else if (e.key === 'l' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            termClear();
+        }
+    }
+    function resolveTermPath(target) {
+        if (!target || target === '~' || target === '/') return '/';
+        if (target === '..') {
+            if (termPath === '/') return '/';
+            const parts = termPath.split('/').filter(Boolean);
+            parts.pop();
+            return '/' + parts.join('/');
+        }
+        if (target.startsWith('/')) return target;
+        return (termPath === '/' ? '' : termPath) + '/' + target;
+    }
+    function termRun(raw) {
+        const line = String(raw || '').trim();
+        const displayPath = termPath === '/' ? '~' : '~' + termPath;
+        termPrintHTML(`<span class="t-blue">user@arch</span>:<span class="t-yellow">${displayPath}</span>$ <span class="t-green">${escapeHtml(line)}</span>`);
+        if (!line) return;
+        termHistory.push(line);
+        termHistoryIdx = termHistory.length;
+        const parts = line.split(/\s+/);
+        const cmd = parts[0].toLowerCase();
+        const args = parts.slice(1);
+
+        switch (cmd) {
+            case 'help':      cmdHelp(); break;
+            case 'ls':        cmdLs(args); break;
+            case 'cd':        cmdCd(args); break;
+            case 'pwd':       termPrint(termPath); break;
+            case 'cat':       cmdCat(args); break;
+            case 'whoami':    termPrint('БЕЛЫЙ', 'green'); termPrint('3D-художник · рендермейкер', 'muted'); break;
+            case 'theme':     cmdTheme(args); break;
+            case 'clear':     termClear(); break;
+            case 'neofetch':  cmdNeofetch(); break;
+            case 'exit':      setTimeout(() => setTheme('win95', null), 600); break;
+            default:          termPrint(`${cmd}: command not found. Type "help".`, 'red');
+        }
+    }
+    function cmdHelp() {
+        termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue');
+    }
+    function cmdLs(args) {
+        const target = args[0] ? resolveTermPath(args[0]) : termPath;
+        if (target === '/') {
+            ['portfolio/','repos/','upload/','bio.txt','contacts.txt','README.md'].forEach(i => termPrint(`  ${i}`, i.endsWith('/') ? 'blue' : 'green'));
+        } else if (target === '/portfolio') {
+            termPrint('  (смотрите на сайте)', 'muted');
+        } else if (target === '/repos') {
+            termPrint('  (смотрите на сайте)', 'muted');
+        } else if (target === '/upload') {
+            termPrint('  submit.sh', 'green');
+        } else {
+            termPrint(`ls: ${args[0]}: No such file`, 'red');
+        }
+    }
+    function cmdCd(args) {
+        if (!args.length) { termPath = '/'; updateTermPrompt(); return; }
+        const newPath = resolveTermPath(args[0]);
+        if (TERM_DIRS.includes(newPath)) {
+            termPath = newPath; updateTermPrompt();
+        } else {
+            termPrint(`cd: ${args[0]}: No such directory`, 'red');
+        }
+    }
+    function cmdCat(args) {
+        if (!args.length) return termPrint('cat: missing filename', 'red');
+        const content = TERM_FILES[resolveTermPath(args[0])];
+        if (content) content.split('\n').forEach(l => termPrint(l));
+        else termPrint(`cat: ${args[0]}: No such file`, 'red');
+    }
+    function cmdTheme(args) {
+        if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, dark, arch', 'red');
+        setTheme(args[0], null);
+    }
+    function cmdNeofetch() {
+        termPrint('    ██████╗ ███████╗██╗     ██╗   ██╗██╗   ██╗', 'green');
+        termPrint('    ██╔══██╗██╔════╝██║     ██║   ██║╚██╗ ██╔╝', 'green');
+        termPrint('    ██████╔╝█████╗  ██║     ██║   ██║ ╚████╔╝ ', 'green');
+        termPrint('    ██╔══██╗██╔══╝  ██║     ██║   ██║  ╚██╔╝  ', 'green');
+        termPrint('    ██████╔╝███████╗███████╗╚██████╔╝   ██║   ', 'green');
+        termPrint('    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ', 'green');
+        termPrint('    OS: БЕЛЫЙ OS v95', 'blue');
+    }
+
+    /* ============================================================
+       TASKBAR & INIT
+    ============================================================ */
+    const windowRegistry = [];
+    let winCounter = 0;
+
+    function registerWindow(el) {
+        const title = el.dataset.windowTitle || el.querySelector('.win-title-text')?.textContent || 'Window';
+        const id = 'w' + (++winCounter);
+        el.dataset.windowId = id;
+        windowRegistry.push({ id, el, title });
+    }
+    function renderTaskbar() {
+        const container = document.getElementById('taskbarItems');
+        if (!container) return;
+        container.innerHTML = windowRegistry.map(w => {
+            const hidden = w.el.style.display === 'none';
+            return `<button class="win-btn taskbar-item ${hidden ? 'inactive' : 'active'}" data-target="${w.id}" title="${escapeHtml(w.title)}">${escapeHtml(w.title)}</button>`;
+        }).join('');
+        container.querySelectorAll('.taskbar-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const w = windowRegistry.find(x => x.id === btn.dataset.target);
+                if (!w) return;
+                w.el.style.display = (w.el.style.display === 'none') ? '' : 'none';
+                renderTaskbar();
+            });
+        });
+    }
+    function minimizeWindow(el) { el.style.display = 'none'; renderTaskbar(); }
+    function restoreAllWindows() { windowRegistry.forEach(w => { w.el.style.display = ''; }); renderTaskbar(); }
+    function updateClock() {
+        const el = document.getElementById('taskbarClock');
+        if (!el) return;
+        const d = new Date();
+        el.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        restoreTheme();
+        document.querySelectorAll('.win-window[data-window-title]').forEach(registerWindow);
+        renderTaskbar();
+
+        const form = document.getElementById('renderForm');
+        if (form) form.addEventListener('submit', handleSubmit);
+
+        const fileInput = document.getElementById('file-upload');
+        const label = document.getElementById('file-label');
+        if (fileInput && label) {
+            fileInput.addEventListener('change', () => {
+                const f = fileInput.files[0];
+                label.textContent = f ? '📎 ' + f.name : '📎 Выбрать файл изображения';
+            });
+        }
+
+        loadGallery();
+        loadGitHubRepos();
+        initTerminal();
+        updateClock();
+        setInterval(updateClock, 60_000);
+
+        document.addEventListener('click', (e) => {
+            const item = e.target.closest('.portfolio-item');
+            if (!item) return;
+            const img = item.querySelector('img');
+            const title = item.querySelector('h3')?.textContent || 'Preview.exe';
+            if (img) openModal(title, img.src);
+        });
+
+        document.getElementById('image-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'image-modal') closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    });
+    </script>
+</body>
+</html>
