@@ -25,6 +25,20 @@
     --border-light: #5a9cff; --border-dark: #0a1a3a; --border-darkest: #000000;
     --input-bg: rgba(255, 255, 255, 0.1); --accent: #5a9cff; --glow: 0 0 40px rgba(90, 156, 255, 0.3);
 }
+:root[data-theme="win1"] {
+    --bg-color: #00aaaa; /* Классический бирюзовый CGA */
+    --window-bg: #ffffff;
+    --text-color: #000000;
+    --text-muted: #555555;
+    --title-bg: #ffffff;
+    --title-text: #000000;
+    --border-light: #ffffff;
+    --border-dark: #000000;
+    --border-darkest: #000000;
+    --input-bg: #ffffff;
+    --accent: #000000;
+    --glow: none;
+}
 
 /* =========================================================
    RESET & BASE
@@ -45,45 +59,24 @@ body {
 :root[data-theme="arch"] .win-btn:hover { background-color: #0d1117; border-color: #1793d1; color: #7ee787; }
 
 /* VISTA AERO GLASS */
-:root[data-theme="vista"] body {
-    background: linear-gradient(135deg, #001c3a 0%, #003366 50%, #001c3a 100%);
-    background-attachment: fixed;
-}
-:root[data-theme="vista"] .win-window {
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(90, 156, 255, 0.1);
-    background: rgba(30, 60, 100, 0.6) !important;
-}
-:root[data-theme="vista"] .win-title-bar {
-    background: linear-gradient(180deg, #4a90e2 0%, #1e3a8a 100%) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-:root[data-theme="vista"] .win-btn {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)) !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
-    border-radius: 4px !important;
-    color: #fff !important;
-}
-:root[data-theme="vista"] .win-btn:hover {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)) !important;
-    border-color: #fff !important;
-    box-shadow: 0 0 10px rgba(90, 156, 255, 0.5);
-}
-:root[data-theme="vista"] .win-inset {
-    background: rgba(0, 0, 0, 0.3) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 3px;
-}
-:root[data-theme="vista"] .win-taskbar {
-    background: rgba(30, 60, 100, 0.8) !important;
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
-}
+:root[data-theme="vista"] body { background: linear-gradient(135deg, #001c3a 0%, #003366 50%, #001c3a 100%); background-attachment: fixed; }
+:root[data-theme="vista"] .win-window { backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(90, 156, 255, 0.1); background: rgba(30, 60, 100, 0.6) !important; }
+:root[data-theme="vista"] .win-title-bar { background: linear-gradient(180deg, #4a90e2 0%, #1e3a8a 100%) !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+:root[data-theme="vista"] .win-btn { background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)) !important; border: 1px solid rgba(255, 255, 255, 0.4) !important; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2); border-radius: 4px !important; color: #fff !important; }
+:root[data-theme="vista"] .win-btn:hover { background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)) !important; border-color: #fff !important; box-shadow: 0 0 10px rgba(90, 156, 255, 0.5); }
+:root[data-theme="vista"] .win-inset { background: rgba(0, 0, 0, 0.3) !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 3px; }
+:root[data-theme="vista"] .win-taskbar { background: rgba(30, 60, 100, 0.8) !important; backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5); }
+
+/* WINDOWS 1.0 (Строгий черно-белый) */
+:root[data-theme="win1"] .win-window { border: 2px solid #000000 !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; }
+:root[data-theme="win1"] .win-title-bar { border-bottom: 2px solid #000000 !important; padding: 4px 6px !important; background: #ffffff !important; }
+:root[data-theme="win1"] .win-title-controls { display: none; /* В Win 1.0 не было кнопок в заголовке */ }
+:root[data-theme="win1"] .win-btn { border: 2px solid #000000 !important; box-shadow: none !important; border-radius: 0 !important; transform: none !important; background: #ffffff !important; color: #000 !important; }
+:root[data-theme="win1"] .win-btn:active { background-color: #000000 !important; color: #ffffff !important; }
+:root[data-theme="win1"] .win-inset { border: 2px solid #000000 !important; background: #ffffff !important; border-radius: 0 !important; }
+:root[data-theme="win1"] .win-taskbar { border-top: 2px solid #000000 !important; box-shadow: none !important; }
+:root[data-theme="win1"] .pip { border: 2px solid #000 !important; background: #fff !important; border-radius: 0 !important; }
+:root[data-theme="win1"] .pip.filled { background: #000 !important; }
 
 /* =========================================================
    ✨ АНИМАЦИИ
@@ -102,13 +95,7 @@ body {
 /* =========================================================
    WINDOW CHROME
 ========================================================= */
-.win-window {
-    background-color: var(--window-bg);
-    border-top: 2px solid var(--border-light); border-left: 2px solid var(--border-light);
-    border-right: 2px solid var(--border-darkest); border-bottom: 2px solid var(--border-darkest);
-    box-shadow: inset -1px -1px 0 var(--border-dark), inset  1px  1px 0 var(--border-light), var(--glow);
-    padding: 2px; position: relative; transition: box-shadow .25s ease, background-color .35s ease;
-}
+.win-window { background-color: var(--window-bg); border-top: 2px solid var(--border-light); border-left: 2px solid var(--border-light); border-right: 2px solid var(--border-darkest); border-bottom: 2px solid var(--border-darkest); box-shadow: inset -1px -1px 0 var(--border-dark), inset  1px  1px 0 var(--border-light), var(--glow); padding: 2px; position: relative; transition: box-shadow .25s ease, background-color .35s ease; }
 :root[data-theme="dark"] .win-window:hover { box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), 0 0 0 1px rgba(59, 130, 246, .35), 0 0 32px rgba(37, 99, 235, .28); }
 :root[data-theme="win95"] .win-window:hover { box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), 2px 2px 0 var(--border-darkest); }
 :root[data-theme="arch"] .win-window:hover { box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), 0 0 12px rgba(23, 147, 209, .45); }
@@ -131,13 +118,7 @@ body {
 /* =========================================================
    BUTTONS & INSET
 ========================================================= */
-.win-btn, .win-control-btn {
-    background-color: var(--window-bg);
-    border-top: 2px solid var(--border-light); border-left: 2px solid var(--border-light);
-    border-right: 2px solid var(--border-darkest); border-bottom: 2px solid var(--border-darkest);
-    color: var(--text-color); padding: 6px 14px; font-weight: bold; cursor: pointer; font-size: 12px;
-    outline: none; text-align: center; transition: all .15s ease; transform: translate(0, 0);
-}
+.win-btn, .win-control-btn { background-color: var(--window-bg); border-top: 2px solid var(--border-light); border-left: 2px solid var(--border-light); border-right: 2px solid var(--border-darkest); border-bottom: 2px solid var(--border-darkest); color: var(--text-color); padding: 6px 14px; font-weight: bold; cursor: pointer; font-size: 12px; outline: none; text-align: center; transition: all .15s ease; transform: translate(0, 0); }
 .win-btn:hover { background-color: color-mix(in srgb, var(--window-bg), var(--border-light) 15%); transform: translate(-1px, -1px); }
 :root[data-theme="dark"] .win-btn:hover { background-color: #0d1117; border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(59, 130, 246, .35); }
 .win-btn:active, .win-btn.active { border-top-color: var(--border-darkest); border-left-color: var(--border-darkest); border-right-color: var(--border-light); border-bottom-color: var(--border-light); transform: translate(1px, 1px); }

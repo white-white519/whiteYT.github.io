@@ -15,6 +15,7 @@
     <div class="win-title-bar"><div class="win-title-text">Shell_Manager.exe</div></div>
     <div class="theme-buttons">
         <button class="win-btn active" data-theme-name="win95" aria-pressed="true"  onclick="setTheme('win95', this)">📟 Windows 95</button>
+        <button class="win-btn"        data-theme-name="win1"  aria-pressed="false" onclick="setTheme('win1',  this)">🖥️ Windows 1.0</button>
         <button class="win-btn"        data-theme-name="dark"  aria-pressed="false" onclick="setTheme('dark',  this)">🌌 Dark Neon</button>
         <button class="win-btn"        data-theme-name="arch"  aria-pressed="false" onclick="setTheme('arch',  this)">⌨️ Arch Terminal</button>
         <button class="win-btn"        data-theme-name="vista" aria-pressed="false" onclick="setTheme('vista', this)">💎 Windows Vista</button>
@@ -177,7 +178,6 @@
     /* ============================================================
        ⚙️ НАСТРОЙКИ
     ============================================================ */
-    // Твоя ссылка от Cloudflare Worker
     const YT_WORKER_URL = 'https://whiteyt-youtube-proxy.vas-vadim51.workers.dev';
     const YT_CHANNEL_ID = 'UClRZ_X9qhqv14H53-g9qfrQ';
 
@@ -185,7 +185,7 @@
        ТЕМЫ
     ============================================================ */
     const THEME_KEY = 'whiteyt-theme';
-    const AVAILABLE_THEMES = ['win95', 'dark', 'arch', 'vista'];
+    const AVAILABLE_THEMES = ['win95', 'win1', 'dark', 'arch', 'vista'];
 
     function setTheme(name, btn) {
         if (!AVAILABLE_THEMES.includes(name)) name = 'win95';
@@ -234,10 +234,16 @@
             const requestUrl = `${YT_WORKER_URL}/?channel_id=${YT_CHANNEL_ID}`;
             const response = await fetch(requestUrl);
 
-            if (!response.ok) throw new Error('Ошибка сети');
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || 'Ошибка сети');
+            }
+
             const videos = await response.json();
 
-            if (!videos || videos.length === 0) throw new Error('Нет видео');
+            if (!Array.isArray(videos) || videos.length === 0) {
+                throw new Error('Воркер вернул пустой массив. Возможно, YouTube блокирует запросы.');
+            }
 
             let html = '';
             for (let i = 0; i < Math.min(videos.length, 7); i++) {
@@ -262,7 +268,7 @@
             container.innerHTML = `
                 <div class="win-inset empty-state" style="grid-column: 1 / -1;">
                     📺 Не удалось загрузить видео.<br>
-                    <small>Проверьте подключение к интернету или обновите страницу.</small>
+                    <small>Причина: ${err.message}</small>
                     <br><br>
                     <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
                 </div>
@@ -346,7 +352,7 @@
     function cmdLs(args) { const target = args[0] ? resolveTermPath(args[0]) : termPath; if (target === '/') { ['portfolio/','repos/','upload/','bio.txt','contacts.txt','README.md'].forEach(i => termPrint(`  ${i}`, i.endsWith('/') ? 'blue' : 'green')); } else if (target === '/portfolio') { termPrint('  (смотрите на сайте)', 'muted'); } else if (target === '/repos') { termPrint('  (смотрите на сайте)', 'muted'); } else if (target === '/upload') { termPrint('  submit.sh', 'green'); } else { termPrint(`ls: ${args[0]}: No such file`, 'red'); } }
     function cmdCd(args) { if (!args.length) { termPath = '/'; updateTermPrompt(); return; } const newPath = resolveTermPath(args[0]); if (TERM_DIRS.includes(newPath)) { termPath = newPath; updateTermPrompt(); } else { termPrint(`cd: ${args[0]}: No such directory`, 'red'); } }
     function cmdCat(args) { if (!args.length) return termPrint('cat: missing filename', 'red'); const content = TERM_FILES[resolveTermPath(args[0])]; if (content) content.split('\n').forEach(l => termPrint(l)); else termPrint(`cat: ${args[0]}: No such file`, 'red'); }
-    function cmdTheme(args) { if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, dark, arch, vista', 'red'); setTheme(args[0], null); }
+    function cmdTheme(args) { if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, win1, dark, arch, vista', 'red'); setTheme(args[0], null); }
     function cmdNeofetch() { termPrint('    ██████╗ ███████╗██╗     ██╗   ██╗██╗   ██╗', 'green'); termPrint('    ██╔══██╗██╔════╝██║     ██║   ██║╚██╗ ██╔╝', 'green'); termPrint('    ██████╔╝█████╗  ██║     ██║   ██║ ╚████╔╝ ', 'green'); termPrint('    ██╔══██╗██╔══╝  ██║     ██║   ██║  ╚██╔╝  ', 'green'); termPrint('    ██████╔╝███████╗███████╗╚██████╔╝   ██║   ', 'green'); termPrint('    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ', 'green'); termPrint('    OS: БЕЛЫЙ OS v95', 'blue'); }
 
     /* ============================================================
