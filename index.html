@@ -156,7 +156,7 @@
 
 <script>
     /* ============================================================
-       ⚙️ ID КАНАЛА YOUTUBE (ВСТАВЛЕН ТВОЙ ID)
+       ⚙️ ID КАНАЛА YOUTUBE
     ============================================================ */
     const YT_CHANNEL_ID = 'UClRZ_X9qhqv14H53-g9qfrQ';
 
@@ -200,7 +200,7 @@
     }
 
     /* ============================================================
-       YOUTUBE RSS FEED
+       УТИЛИТЫ
     ============================================================ */
     function escapeHtml(str) {
         return String(str ?? '').replace(/[&<>"']/g, ch => ({
@@ -208,33 +208,33 @@
         })[ch]);
     }
 
+    /* ============================================================
+       YOUTUBE RSS FEED (НАДЕЖНЫЙ)
+    ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
         if (!container) return;
 
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
         try {
-            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
-            // Используем CORS-прокси, так как YouTube не отдаёт XML напрямую в браузер
-            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
-
-            const response = await fetch(proxyUrl);
+            const response = await fetch(apiUrl);
             if (!response.ok) throw new Error('Network error');
-            const text = await response.text();
 
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(text, 'text/xml');
-            const entries = xmlDoc.querySelectorAll('entry');
+            const data = await response.json();
+            if (data.status !== 'ok') throw new Error('RSS2JSON error');
 
-            if (entries.length === 0) throw new Error('No videos found');
+            const items = data.items;
+            if (!items || items.length === 0) throw new Error('No videos');
 
             let html = '';
-            // Берём только первые 7 видео
-            for (let i = 0; i < Math.min(entries.length, 7); i++) {
-                const entry = entries[i];
-                const title = entry.querySelector('title').textContent;
-                const videoId = entry.querySelector('yt\\:videoId').textContent;
-                const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
-                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            for (let i = 0; i < Math.min(items.length, 7); i++) {
+                const item = items[i];
+                const title = item.title;
+                const videoId = item.link.split('v=')[1];
+                const thumbnail = item.thumbnail || `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+                const videoUrl = item.link;
 
                 html += `
                     <div class="video-item win-inset" style="--i: ${i};">
@@ -250,15 +250,50 @@
             container.innerHTML = html;
 
         } catch (err) {
-            console.warn('YouTube RSS Error:', err);
-            container.innerHTML = `
-                <div class="win-inset empty-state" style="grid-column: 1 / -1;">
-                    📺 Не удалось загрузить видео.<br>
-                    <small>Проверьте настройки или перейдите на канал напрямую.</small>
-                    <br><br>
-                    <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
-                </div>
-            `;
+            console.warn('Первый метод (rss2json) не сработал, пробуем резервный...', err);
+
+            // Резервный метод через allorigins
+            try {
+                const fallbackUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
+                const res = await fetch(fallbackUrl);
+                const text = await res.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(text, 'text/xml');
+                const entries = xmlDoc.querySelectorAll('entry');
+
+                if (entries.length === 0) throw new Error('No videos');
+
+                let html = '';
+                for (let i = 0; i < Math.min(entries.length, 7); i++) {
+                    const entry = entries[i];
+                    const title = entry.querySelector('title').textContent;
+                    const videoId = entry.querySelector('yt\\:videoId').textContent;
+                    const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+                    html += `
+                        <div class="video-item win-inset" style="--i: ${i};">
+                            <div class="video-thumbnail">
+                                <img src="${thumbnail}" alt="${escapeHtml(title)}" loading="lazy">
+                                <div class="play-overlay">▶</div>
+                            </div>
+                            <div class="video-title">${escapeHtml(title)}</div>
+                            <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+            } catch (err2) {
+                console.warn('Все методы загрузки видео упали.', err2);
+                container.innerHTML = `
+                    <div class="win-inset empty-state" style="grid-column: 1 / -1;">
+                        📺 Не удалось загрузить видео.<br>
+                        <small>Проверьте настройки или перейдите на канал напрямую.</small>
+                        <br><br>
+                        <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
+                    </div>
+                `;
+            }
         }
     }
 
