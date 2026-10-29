@@ -209,91 +209,105 @@
     }
 
     /* ============================================================
-       YOUTUBE RSS FEED (НАДЕЖНЫЙ)
+       YOUTUBE RSS FEED (МУЛЬТИ-ПРОКСИ ЗАЩИТА)
     ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
         if (!container) return;
 
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
-        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error('Network error');
+        // Список прокси-серверов на случай, если один заблокируют
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`, // 1. allorigins (возвращает JSON)
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`, // 2. codetabs (возвращает XML)
+            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}` // 3. rss2json (возвращает JSON)
+        ];
 
-            const data = await response.json();
-            if (data.status !== 'ok') throw new Error('RSS2JSON error');
+        let success = false;
 
-            const items = data.items;
-            if (!items || items.length === 0) throw new Error('No videos');
+        for (let i = 0; i < proxies.length; i++) {
+            if (success) break;
+            const proxyUrl = proxies[i];
 
-            let html = '';
-            for (let i = 0; i < Math.min(items.length, 7); i++) {
-                const item = items[i];
-                const title = item.title;
-                const videoId = item.link.split('v=')[1];
-                const thumbnail = item.thumbnail || `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
-                const videoUrl = item.link;
-
-                html += `
-                    <div class="video-item win-inset" style="--i: ${i};">
-                        <div class="video-thumbnail">
-                            <img src="${thumbnail}" alt="${escapeHtml(title)}" loading="lazy">
-                            <div class="play-overlay">▶</div>
-                        </div>
-                        <div class="video-title">${escapeHtml(title)}</div>
-                        <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-
-        } catch (err) {
-            console.warn('Первый метод (rss2json) не сработал, пробуем резервный...', err);
-
-            // Резервный метод через allorigins
             try {
-                const fallbackUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
-                const res = await fetch(fallbackUrl);
-                const text = await res.text();
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(text, 'text/xml');
-                const entries = xmlDoc.querySelectorAll('entry');
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error('Network response not ok');
 
-                if (entries.length === 0) throw new Error('No videos');
+                const contentType = response.headers.get("content-type");
+                let entries = [];
 
-                let html = '';
-                for (let i = 0; i < Math.min(entries.length, 7); i++) {
-                    const entry = entries[i];
-                    const title = entry.querySelector('title').textContent;
-                    const videoId = entry.querySelector('yt\\:videoId').textContent;
-                    const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
-                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                if (contentType && contentType.includes("application/json")) {
+                    const data = await response.json();
 
-                    html += `
-                        <div class="video-item win-inset" style="--i: ${i};">
-                            <div class="video-thumbnail">
-                                <img src="${thumbnail}" alt="${escapeHtml(title)}" loading="lazy">
-                                <div class="play-overlay">▶</div>
-                            </div>
-                            <div class="video-title">${escapeHtml(title)}</div>
-                            <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
-                        </div>
-                    `;
+                    if (data.status === 'ok' && data.items) {
+                         // Ответ от rss2json
+                         data.items.slice(0, 7).forEach(item => {
+                             entries.push({ title: item.title, link: item.link });
+                         });
+                    } else if (data.contents) {
+                         // Ответ от allorigins (XML внутри JSON)
+                         const parser = new DOMParser();
+                         const xmlDoc = parser.parseFromString(data.contents, 'text/xml');
+                         const xmlEntries = xmlDoc.querySelectorAll('entry');
+                         xmlEntries.forEach(entry => {
+                             entries.push({
+                                 title: entry.querySelector('title').textContent,
+                                 link: entry.querySelector('link').getAttribute('href')
+                             });
+                         });
+                    }
+                } else {
+                    // Ответ от codetabs (чистый XML)
+                    const text = await response.text();
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(text, 'text/xml');
+                    const xmlEntries = xmlDoc.querySelectorAll('entry');
+                    xmlEntries.forEach(entry => {
+                        entries.push({
+                            title: entry.querySelector('title').textContent,
+                            link: entry.querySelector('link').getAttribute('href')
+                        });
+                    });
                 }
-                container.innerHTML = html;
-            } catch (err2) {
-                console.warn('Все методы загрузки видео упали.', err2);
-                container.innerHTML = `
-                    <div class="win-inset empty-state" style="grid-column: 1 / -1;">
-                        📺 Не удалось загрузить видео.<br>
-                        <small>Проверьте настройки или перейдите на канал напрямую.</small>
-                        <br><br>
-                        <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
-                    </div>
-                `;
+
+                if (entries.length > 0) {
+                    let html = '';
+                    for (let j = 0; j < Math.min(entries.length, 7); j++) {
+                        const item = entries[j];
+                        const videoUrl = item.link;
+                        const videoId = videoUrl.split('v=')[1];
+                        const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+
+                        html += `
+                            <div class="video-item win-inset" style="--i: ${j};">
+                                <div class="video-thumbnail">
+                                    <img src="${thumbnail}" alt="${escapeHtml(item.title)}" loading="lazy">
+                                    <div class="play-overlay">▶</div>
+                                </div>
+                                <div class="video-title">${escapeHtml(item.title)}</div>
+                                <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
+                            </div>
+                        `;
+                    }
+                    container.innerHTML = html;
+                    success = true; // Успех! Останавливаем перебор
+                }
+            } catch (err) {
+                console.warn(`Прокси №${i+1} упал, пробуем следующий...`);
             }
+        }
+
+        if (!success) {
+            console.warn('Все методы загрузки видео упали.');
+            container.innerHTML = `
+                <div class="win-inset empty-state" style="grid-column: 1 / -1;">
+                    📺 Не удалось загрузить видео.<br>
+                    <small>YouTube временно ограничил доступ. Попробуйте обновить страницу позже.</small>
+                    <br><br>
+                    <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
+                </div>
+            `;
         }
     }
 

@@ -1,0 +1,20 @@
+name: Update YouTube Feed
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Каждые 6 часов
+  workflow_dispatch: # Позволяет запускать вручную
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install node-fetch
+      - run: node scripts/fetch-youtube.js
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Автообновление ленты YouTube"
+          file_pattern: youtube.json
