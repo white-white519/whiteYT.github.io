@@ -55,29 +55,53 @@
     </div>
 </main>
 
-<!-- ================= SKILLS ================= -->
-<section class="win-window skills-window win-load-anim" style="--delay: 0.3s;" data-window-title="My_Skills.sys">
+<!-- ================= D&D SKILLS ================= -->
+<section class="win-window skills-window win-load-anim" style="--delay: 0.3s;" data-window-title="Character_Sheet.sys">
     <div class="win-title-bar">
-        <div class="win-title-text">C:\System\My_Skills.sys</div>
+        <div class="win-title-text">C:\System\Character_Sheet.sys</div>
         <div class="win-title-controls">
             <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
             <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
         </div>
     </div>
     <div class="win-window-body">
-        <h3 style="margin-bottom: 20px;">Уровень мастерства:</h3>
-        <div class="skills-grid">
-            <div class="skill-item">
-                <div class="skill-label"><span>3D Рендеры (Blender)</span> <span>95%</span></div>
-                <div class="win-progress-bar"><div class="win-progress-fill" style="width: 95%;"></div></div>
+        <h3 style="margin-bottom: 20px;">Характеристики персонажа 🎲:</h3>
+
+        <div class="dnd-stats-grid">
+            <!-- Stat 1 -->
+            <div class="dnd-stat-row">
+                <div class="dnd-stat-name">3D Рендеры <span class="dnd-stat-val">16 / 20</span></div>
+                <div class="dnd-pips">
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
+                </div>
             </div>
-            <div class="skill-item">
-                <div class="skill-label"><span>Java (Minecraft Mods)</span> <span>80%</span></div>
-                <div class="win-progress-bar"><div class="win-progress-fill" style="width: 80%;"></div></div>
+
+            <!-- Stat 2 -->
+            <div class="dnd-stat-row">
+                <div class="dnd-stat-name">Java (Minecraft Mods) <span class="dnd-stat-val">14 / 20</span></div>
+                <div class="dnd-pips">
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
+                </div>
             </div>
-            <div class="skill-item">
-                <div class="skill-label"><span>Видеомонтаж / Стриминг</span> <span>90%</span></div>
-                <div class="win-progress-bar"><div class="win-progress-fill" style="width: 90%;"></div></div>
+
+            <!-- Stat 3 -->
+            <div class="dnd-stat-row">
+                <div class="dnd-stat-name">Видеомонтаж / Стриминг <span class="dnd-stat-val">15 / 20</span></div>
+                <div class="dnd-pips">
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip filled"></div><div class="pip filled"></div><div class="pip filled"></div>
+                    <div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -156,11 +180,6 @@
 
 <script>
     /* ============================================================
-       ⚙️ ID КАНАЛА YOUTUBE
-    ============================================================ */
-    const YT_CHANNEL_ID = 'UClRZ_X9qhqv14H53-g9qfrQ';
-
-    /* ============================================================
        ТЕМЫ
     ============================================================ */
     const THEME_KEY = 'whiteyt-theme';
@@ -209,101 +228,43 @@
     }
 
     /* ============================================================
-       YOUTUBE RSS FEED (МУЛЬТИ-ПРОКСИ ЗАЩИТА)
+       YOUTUBE (ИЗ ЛОКАЛЬНОГО JSON)
     ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
         if (!container) return;
 
-        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
+        try {
+            const response = await fetch('youtube-videos.json');
+            if (!response.ok) throw new Error('Файл еще не создан или недоступен');
 
-        // Список прокси-серверов на случай, если один заблокируют
-        const proxies = [
-            `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`, // 1. allorigins (возвращает JSON)
-            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`, // 2. codetabs (возвращает XML)
-            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}` // 3. rss2json (возвращает JSON)
-        ];
+            const videos = await response.json();
+            if (!videos || videos.length === 0) throw new Error('Нет видео');
 
-        let success = false;
+            let html = '';
+            for (let i = 0; i < Math.min(videos.length, 7); i++) {
+                const video = videos[i];
+                const thumbnail = `https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`;
 
-        for (let i = 0; i < proxies.length; i++) {
-            if (success) break;
-            const proxyUrl = proxies[i];
-
-            try {
-                const response = await fetch(proxyUrl);
-                if (!response.ok) throw new Error('Network response not ok');
-
-                const contentType = response.headers.get("content-type");
-                let entries = [];
-
-                if (contentType && contentType.includes("application/json")) {
-                    const data = await response.json();
-
-                    if (data.status === 'ok' && data.items) {
-                         // Ответ от rss2json
-                         data.items.slice(0, 7).forEach(item => {
-                             entries.push({ title: item.title, link: item.link });
-                         });
-                    } else if (data.contents) {
-                         // Ответ от allorigins (XML внутри JSON)
-                         const parser = new DOMParser();
-                         const xmlDoc = parser.parseFromString(data.contents, 'text/xml');
-                         const xmlEntries = xmlDoc.querySelectorAll('entry');
-                         xmlEntries.forEach(entry => {
-                             entries.push({
-                                 title: entry.querySelector('title').textContent,
-                                 link: entry.querySelector('link').getAttribute('href')
-                             });
-                         });
-                    }
-                } else {
-                    // Ответ от codetabs (чистый XML)
-                    const text = await response.text();
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(text, 'text/xml');
-                    const xmlEntries = xmlDoc.querySelectorAll('entry');
-                    xmlEntries.forEach(entry => {
-                        entries.push({
-                            title: entry.querySelector('title').textContent,
-                            link: entry.querySelector('link').getAttribute('href')
-                        });
-                    });
-                }
-
-                if (entries.length > 0) {
-                    let html = '';
-                    for (let j = 0; j < Math.min(entries.length, 7); j++) {
-                        const item = entries[j];
-                        const videoUrl = item.link;
-                        const videoId = videoUrl.split('v=')[1];
-                        const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
-
-                        html += `
-                            <div class="video-item win-inset" style="--i: ${j};">
-                                <div class="video-thumbnail">
-                                    <img src="${thumbnail}" alt="${escapeHtml(item.title)}" loading="lazy">
-                                    <div class="play-overlay">▶</div>
-                                </div>
-                                <div class="video-title">${escapeHtml(item.title)}</div>
-                                <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
-                            </div>
-                        `;
-                    }
-                    container.innerHTML = html;
-                    success = true; // Успех! Останавливаем перебор
-                }
-            } catch (err) {
-                console.warn(`Прокси №${i+1} упал, пробуем следующий...`);
+                html += `
+                    <div class="video-item win-inset" style="--i: ${i};">
+                        <div class="video-thumbnail">
+                            <img src="${thumbnail}" alt="${escapeHtml(video.title)}" loading="lazy">
+                            <div class="play-overlay">▶</div>
+                        </div>
+                        <div class="video-title">${escapeHtml(video.title)}</div>
+                        <a href="${video.link}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
+                    </div>
+                `;
             }
-        }
+            container.innerHTML = html;
 
-        if (!success) {
-            console.warn('Все методы загрузки видео упали.');
+        } catch (err) {
+            console.warn('YouTube Fetch error:', err);
             container.innerHTML = `
                 <div class="win-inset empty-state" style="grid-column: 1 / -1;">
-                    📺 Не удалось загрузить видео.<br>
-                    <small>YouTube временно ограничил доступ. Попробуйте обновить страницу позже.</small>
+                    📺 Видео скоро появятся.<br>
+                    <small>GitHub Actions обновляет этот список каждые 6 часов.</small>
                     <br><br>
                     <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
                 </div>

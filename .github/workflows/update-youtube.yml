@@ -1,3 +1,4 @@
+# .github/workflows/update-youtube.yml
 name: Update YouTube Feed
 on:
   schedule:
@@ -8,13 +9,19 @@ jobs:
   update-feed:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '20'
-      - run: npm install node-fetch
-      - run: node scripts/fetch-youtube.js
-      - uses: stefanzweifel/git-auto-commit-action@v5
+          python-version: '3.11'
+
+      - name: Run script to fetch YouTube videos
+        run: python scripts/fetch_youtube.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Автообновление ленты YouTube"
-          file_pattern: youtube.json
+          file_pattern: youtube-videos.json
