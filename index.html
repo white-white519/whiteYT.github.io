@@ -104,8 +104,27 @@
     </div>
 </section>
 
+<!-- ================= MY RENDERS PORTFOLIO ================= -->
+<section class="win-window portfolio-window win-load-anim" style="--delay: 0.4s;" data-window-title="Render_Gallery.exe">
+    <div class="win-title-bar">
+        <div class="win-title-text">C:\Graphics\Render_Gallery.exe</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+        </div>
+    </div>
+    <div class="win-window-body">
+        <h3 style="margin-bottom: 20px;">Мои работы (3D Рендеры):</h3>
+        <div class="render-grid" id="portfolio-gallery">
+            <div class="win-inset empty-state" style="grid-column: 1 / -1;">
+                📁 Загрузка портфолио...
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ================= YOUTUBE VIDEOS ================= -->
-<section class="win-window portfolio-window win-load-anim" style="--delay: 0.45s;" data-window-title="YouTube_Feed.exe">
+<section class="win-window portfolio-window win-load-anim" style="--delay: 0.5s;" data-window-title="YouTube_Feed.exe">
     <div class="win-title-bar">
         <div class="win-title-text">C:\Media\YouTube_Feed.exe</div>
         <div class="win-title-controls">
@@ -114,7 +133,6 @@
         </div>
     </div>
     <div class="win-window-body" style="padding: 0; overflow: hidden;">
-        <!-- Градиентные маски по бокам добавлены через CSS -->
         <div class="youtube-circular-grid" id="youtube-feed">
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
@@ -155,8 +173,7 @@
         <div class="terminal-output" id="terminal-output"></div>
         <div class="terminal-prompt-line">
             <span class="terminal-prompt" id="terminal-prompt">user@arch:~$</span>
-            <input type="text" id="terminal-input" class="terminal-input"
-                   autocomplete="off" spellcheck="false" aria-label="Терминал">
+            <input type="text" id="terminal-input" class="terminal-input" autocomplete="off" spellcheck="false" aria-label="Терминал">
         </div>
     </div>
 </section>
@@ -172,12 +189,32 @@
     <p>БЕЛЫЙ OS [Version 95.2026.10] • Made with ❤️</p>
 </footer>
 
+<!-- ================= MODAL ДЛЯ ПРОСМОТРА КАРТИНОК ================= -->
+<div id="image-modal" class="modal-overlay" style="display:none;">
+    <div class="win-window modal-window">
+        <div class="win-title-bar">
+            <div class="win-title-text" id="modalTitle">Preview.exe</div>
+            <div class="win-title-controls">
+                <button class="win-control-btn close-btn" onclick="closeModal()">X</button>
+            </div>
+        </div>
+        <div class="win-window-body modal-body">
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+</div>
+
 <script>
     /* ============================================================
        ⚙️ НАСТРОЙКИ
     ============================================================ */
     const YT_WORKER_URL = 'https://whiteyt-youtube-proxy.vas-vadim51.workers.dev';
     const YT_CHANNEL_ID = 'UClRZ_X9qhqv14H53-g9qfrQ';
+
+    // Репозиторий, откуда сайт будет брать картинки для портфолио
+    const GITHUB_USER = 'white-white519';
+    const GITHUB_REPO = 'whiteYT.github.io';
+    const RENDERS_FOLDER = 'images/renders'; // Путь к папке с рендерами
 
     /* ============================================================
        ТЕМЫ
@@ -195,11 +232,7 @@
             b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
         if (name === 'arch') {
-            setTimeout(() => {
-                initTerminal();
-                const ti = document.getElementById('terminal-input');
-                if (ti) ti.focus();
-            }, 50);
+            setTimeout(() => { initTerminal(); const ti = document.getElementById('terminal-input'); if (ti) ti.focus(); }, 50);
         }
     }
     function restoreTheme() {
@@ -216,9 +249,53 @@
     }
 
     function escapeHtml(str) {
-        return String(str ?? '').replace(/[&<>"']/g, ch => ({
-            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        })[ch]);
+        return String(str ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
+    }
+
+    /* ============================================================
+       ПОРТФОЛИО РЕНДЕРОВ (ИЗ GITHUB API)
+    ============================================================ */
+    async function loadPortfolio() {
+        const container = document.getElementById('portfolio-gallery');
+        if (!container) return;
+
+        try {
+            const url = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${RENDERS_FOLDER}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Папка с рендерами не найдена');
+
+            const files = await response.json();
+
+            // Фильтруем только картинки
+            const images = files.filter(f => f.type === 'file' && /\.(jpg|jpeg|png|webp|gif)$/i.test(f.name));
+
+            if (images.length === 0) {
+                container.innerHTML = `<div class="win-inset empty-state">📁 Пока нет рендеров. Загрузите их в папку <code>images/renders</code> на GitHub.</div>`;
+                return;
+            }
+
+            let html = '';
+            images.forEach((img, i) => {
+                // Превращаем "cool_render.png" в "Cool Render"
+                const cleanName = img.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ');
+                const title = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+
+                html += `
+                    <div class="render-card win-inset" style="--i: ${i};" onclick="openModal('${title}', '${img.download_url}')">
+                        <div class="render-thumb">
+                            <img src="${img.download_url}" alt="${title}" loading="lazy">
+                        </div>
+                        <div class="render-title">${title}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+        } catch (err) {
+            console.warn('Portfolio load error:', err);
+            container.innerHTML = `<div class="win-inset empty-state">⚠️ Не удалось загрузить портфолио. Проверьте папку <code>images/renders</code>.</div>`;
+        }
     }
 
     /* ============================================================
@@ -231,22 +308,12 @@
         try {
             const requestUrl = `${YT_WORKER_URL}/?channel_id=${YT_CHANNEL_ID}`;
             const response = await fetch(requestUrl);
-
-            if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error || 'Ошибка сети');
-            }
-
+            if (!response.ok) throw new Error('Ошибка сети');
             const videos = await response.json();
+            if (!Array.isArray(videos) || videos.length === 0) throw new Error('Нет видео');
 
-            if (!Array.isArray(videos) || videos.length === 0) {
-                throw new Error('Воркер вернул пустой массив.');
-            }
-
-            // Ограничиваем до 20 последних видео, чтобы страница не тормозила
             const limit = Math.min(videos.length, 20);
             let html = '';
-
             for (let i = 0; i < limit; i++) {
                 const video = videos[i];
                 const thumbnail = `https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`;
@@ -261,61 +328,34 @@
                     </div>
                 `;
             }
-
-            // ДУБЛИРУЕМ HTML, чтобы создать бесконечную ленту
-            container.innerHTML = html + html;
+            container.innerHTML = html + html; // Дублируем для бесконечности
             initYouTubeCarousel();
-
         } catch (err) {
-            console.warn('YouTube Fetch error:', err);
-            container.innerHTML = `
-                <div class="win-inset empty-state" style="width: 100%; margin: 0 auto;">
-                    📺 Не удалось загрузить видео.<br>
-                    <small>Причина: ${err.message}</small>
-                    <br><br>
-                    <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
-                </div>
-            `;
+            container.innerHTML = `<div class="win-inset empty-state" style="width:100%;">📺 Не удалось загрузить видео.</div>`;
         }
     }
 
-    // --- БЕСКОНЕЧНАЯ АВТО-ПРОКРУТКА ---
     let isHovered = false;
     let animationId = null;
-
     function initYouTubeCarousel() {
         const feed = document.getElementById('youtube-feed');
         if (!feed) return;
-
         feed.addEventListener('mouseenter', () => { isHovered = true; });
         feed.addEventListener('mouseleave', () => { isHovered = false; });
-
         feed.scrollLeft = 0;
         if (animationId) cancelAnimationFrame(animationId);
-
         function autoScroll() {
             if (!feed) return;
-
-            // Если мышка не наведена, крутим
-            if (!isHovered) {
-                feed.scrollLeft += 2; // Скорость прокрутки (2 пикселя за кадр)
-            }
-
-            // Логика "колеса": когда доходим до половины, мгновенно сдвигаем в начало
-            if (feed.scrollLeft >= feed.scrollWidth / 2) {
-                feed.scrollLeft -= feed.scrollWidth / 2;
-            } else if (feed.scrollLeft <= 0) {
-                feed.scrollLeft += feed.scrollWidth / 2;
-            }
-
+            if (!isHovered) feed.scrollLeft += 2;
+            if (feed.scrollLeft >= feed.scrollWidth / 2) feed.scrollLeft -= feed.scrollWidth / 2;
+            else if (feed.scrollLeft <= 0) feed.scrollLeft += feed.scrollWidth / 2;
             animationId = requestAnimationFrame(autoScroll);
         }
-
         animationId = requestAnimationFrame(autoScroll);
     }
 
     /* ============================================================
-       GITHUB API
+       GITHUB API (РЕПОЗИТОРИИ)
     ============================================================ */
     const GH_USER = 'white-white519';
     const GH_CACHE_KEY = 'gh-repos-cache-v1';
@@ -368,16 +408,30 @@
     function refreshGitHubRepos() { try { sessionStorage.removeItem(GH_CACHE_KEY); } catch (e) {} loadGitHubRepos(); }
 
     /* ============================================================
+       МОДАЛЬНОЕ ОКНО ДЛЯ РЕНДЕРОВ
+    ============================================================ */
+    function openModal(title, src) {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalImage').src = src;
+        document.getElementById('image-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Блокируем скролл страницы
+    }
+    function closeModal() {
+        document.getElementById('image-modal').style.display = 'none';
+        document.getElementById('modalImage').src = '';
+        document.body.style.overflow = '';
+    }
+    // Закрытие по клику на фон или клавише Escape
+    document.addEventListener('click', (e) => { if (e.target.id === 'image-modal') closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    /* ============================================================
        ARCH TERMINAL
     ============================================================ */
-    let termPath = '/';
+    let termPath = '/', termHistoryIdx = -1, terminalInitialized = false;
     const termHistory = [];
-    let termHistoryIdx = -1, terminalInitialized = false;
     const TERM_DIRS = ['/', '/portfolio', '/repos', '/upload'];
-    const TERM_FILES = {
-        '/bio.txt': `Имя: БЕЛЫЙ\nДР: 16 января (Козерог ♑)\nРоль: 3D-художник, рендермейкер\nСтатус: Если не злить — не укушу :3`,
-        '/contacts.txt': `Telegram : https://t.me/podvalwhiteq\nYouTube  : https://www.youtube.com/@HospitalwhiteYT\nTwitch   : https://www.twitch.tv/whiteyt456`
-    };
+    const TERM_FILES = { '/bio.txt': `Имя: БЕЛЫЙ\nДР: 16 января (Козерог ♑)`, '/contacts.txt': `Telegram : https://t.me/podvalwhiteq` };
     function termPrint(text, cls) { const out = document.getElementById('terminal-output'); if (!out) return; const line = document.createElement('div'); if (cls) line.className = 't-' + cls; line.textContent = text; out.appendChild(line); out.scrollTop = out.scrollHeight; }
     function termPrintHTML(html) { const out = document.getElementById('terminal-output'); if (!out) return; const line = document.createElement('div'); line.innerHTML = html; out.appendChild(line); out.scrollTop = out.scrollHeight; }
     function termClear() { const out = document.getElementById('terminal-output'); if (out) out.innerHTML = ''; }
@@ -386,12 +440,7 @@
     function initTerminal() { if (terminalInitialized) return; terminalInitialized = true; const input = document.getElementById('terminal-input'); if (!input) return; input.addEventListener('keydown', handleTermKey); printBanner(); updateTermPrompt(); }
     function handleTermKey(e) { if (e.key === 'Enter') { e.preventDefault(); const line = e.target.value; e.target.value = ''; termRun(line); } else if (e.key === 'ArrowUp') { e.preventDefault(); if (termHistoryIdx === -1) termHistoryIdx = termHistory.length; if (termHistoryIdx > 0) termHistoryIdx--; e.target.value = termHistory[termHistoryIdx] || ''; } else if (e.key === 'ArrowDown') { e.preventDefault(); if (termHistoryIdx < termHistory.length - 1) termHistoryIdx++; else termHistoryIdx = termHistory.length; e.target.value = termHistory[termHistoryIdx] || ''; } else if (e.key === 'l' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); termClear(); } }
     function resolveTermPath(target) { if (!target || target === '~' || target === '/') return '/'; if (target === '..') { if (termPath === '/') return '/'; const parts = termPath.split('/').filter(Boolean); parts.pop(); return '/' + parts.join('/'); } if (target.startsWith('/')) return target; return (termPath === '/' ? '' : termPath) + '/' + target; }
-    function termRun(raw) { const line = String(raw || '').trim(); const displayPath = termPath === '/' ? '~' : '~' + termPath; termPrintHTML(`<span class="t-blue">user@arch</span>:<span class="t-yellow">${displayPath}</span>$ <span class="t-green">${escapeHtml(line)}</span>`); if (!line) return; termHistory.push(line); termHistoryIdx = termHistory.length; const parts = line.split(/\s+/); const cmd = parts[0].toLowerCase(); const args = parts.slice(1); switch (cmd) { case 'help': termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue'); break; case 'ls': cmdLs(args); break; case 'cd': cmdCd(args); break; case 'pwd': termPrint(termPath); break; case 'cat': cmdCat(args); break; case 'whoami': termPrint('БЕЛЫЙ', 'green'); termPrint('3D-художник · рендермейкер', 'muted'); break; case 'theme': cmdTheme(args); break; case 'clear': termClear(); break; case 'neofetch': cmdNeofetch(); break; case 'exit': setTimeout(() => setTheme('win95', null), 600); break; default: termPrint(`${cmd}: command not found. Type "help".`, 'red'); } }
-    function cmdLs(args) { const target = args[0] ? resolveTermPath(args[0]) : termPath; if (target === '/') { ['portfolio/','repos/','upload/','bio.txt','contacts.txt','README.md'].forEach(i => termPrint(`  ${i}`, i.endsWith('/') ? 'blue' : 'green')); } else if (target === '/portfolio') { termPrint('  (смотрите на сайте)', 'muted'); } else if (target === '/repos') { termPrint('  (смотрите на сайте)', 'muted'); } else if (target === '/upload') { termPrint('  submit.sh', 'green'); } else { termPrint(`ls: ${args[0]}: No such file`, 'red'); } }
-    function cmdCd(args) { if (!args.length) { termPath = '/'; updateTermPrompt(); return; } const newPath = resolveTermPath(args[0]); if (TERM_DIRS.includes(newPath)) { termPath = newPath; updateTermPrompt(); } else { termPrint(`cd: ${args[0]}: No such directory`, 'red'); } }
-    function cmdCat(args) { if (!args.length) return termPrint('cat: missing filename', 'red'); const content = TERM_FILES[resolveTermPath(args[0])]; if (content) content.split('\n').forEach(l => termPrint(l)); else termPrint(`cat: ${args[0]}: No such file`, 'red'); }
-    function cmdTheme(args) { if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, win1, dark, arch, vista', 'red'); setTheme(args[0], null); }
-    function cmdNeofetch() { termPrint('    ██████╗ ███████╗██╗     ██╗   ██╗██╗   ██╗', 'green'); termPrint('    ██╔══██╗██╔════╝██║     ██║   ██║╚██╗ ██╔╝', 'green'); termPrint('    ██████╔╝█████╗  ██║     ██║   ██║ ╚████╔╝ ', 'green'); termPrint('    ██╔══██╗██╔══╝  ██║     ██║   ██║  ╚██╔╝  ', 'green'); termPrint('    ██████╔╝███████╗███████╗╚██████╔╝   ██║   ', 'green'); termPrint('    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ', 'green'); termPrint('    OS: БЕЛЫЙ OS v95', 'blue'); }
+    function termRun(raw) { const line = String(raw || '').trim(); const displayPath = termPath === '/' ? '~' : '~' + termPath; termPrintHTML(`<span class="t-blue">user@arch</span>:<span class="t-yellow">${displayPath}</span>$ <span class="t-green">${escapeHtml(line)}</span>`); if (!line) return; termHistory.push(line); termHistoryIdx = termHistory.length; const parts = line.split(/\s+/); const cmd = parts[0].toLowerCase(); const args = parts.slice(1); switch (cmd) { case 'help': termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue'); break; case 'ls': termPrint('  portfolio/  repos/  bio.txt', 'green'); break; case 'cd': if (!args.length) { termPath = '/'; updateTermPrompt(); return; } const newPath = resolveTermPath(args[0]); if (TERM_DIRS.includes(newPath)) { termPath = newPath; updateTermPrompt(); } else { termPrint(`cd: ${args[0]}: No such directory`, 'red'); } break; case 'cat': if (!args.length) return termPrint('cat: missing filename', 'red'); const content = TERM_FILES[resolveTermPath(args[0])]; if (content) content.split('\n').forEach(l => termPrint(l)); else termPrint(`cat: ${args[0]}: No such file`, 'red'); break; case 'whoami': termPrint('БЕЛЫЙ', 'green'); break; case 'theme': if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, win1, dark, arch, vista', 'red'); setTheme(args[0], null); break; case 'clear': termClear(); break; case 'neofetch': termPrint('    OS: БЕЛЫЙ OS v95', 'blue'); break; case 'exit': setTimeout(() => setTheme('win95', null), 600); break; default: termPrint(`${cmd}: command not found.`, 'red'); } }
 
     /* ============================================================
        TASKBAR & INIT
@@ -408,6 +457,7 @@
         restoreTheme();
         document.querySelectorAll('.win-window[data-window-title]').forEach(registerWindow);
         renderTaskbar();
+        loadPortfolio(); // Загружаем рендеры
         loadYouTubeVideos();
         loadGitHubRepos();
         initTerminal();
