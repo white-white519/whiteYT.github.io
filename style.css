@@ -156,18 +156,20 @@ body {
 :root[data-theme="vista"] .pip.filled { background-color: #5a9cff; box-shadow: 0 0 10px rgba(90, 156, 255, 0.8); }
 
 /* =========================================================
-   YOUTUBE GRID (КАРУСЕЛЬ)
+   YOUTUBE GRID (БЕСКОНЕЧНАЯ КАРУСЕЛЬ)
 ========================================================= */
 .youtube-circular-grid {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     gap: 20px;
-    padding: 20px 5%; /* Немного отступа по краям */
-    scroll-snap-type: x mandatory;
+    padding: 20px 10%;
     scrollbar-width: none; /* Скрываем скроллбар Firefox */
     -ms-overflow-style: none; /* Скрываем скроллбар IE/Edge */
     cursor: grab;
+    /* Градиентная маска для эффекта "растворения" по краям */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 .youtube-circular-grid::-webkit-scrollbar {
     display: none; /* Скрываем скроллбар Chrome/Safari */
@@ -186,11 +188,8 @@ body {
     padding: 10px;
     border-radius: 12px;
     overflow: hidden;
-    animation: videoPop 0.6s cubic-bezier(.2, .8, .3, 1) both;
-    animation-delay: calc(var(--i) * 0.1s + 0.5s);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    scroll-snap-align: center; /* Прилипание к центру */
 }
 .video-item:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 10; }
 .video-thumbnail { width: 100%; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; position: relative; border: 2px solid var(--border-darkest); background: #000; }

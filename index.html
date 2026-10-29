@@ -113,12 +113,9 @@
             <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
         </div>
     </div>
-    <div class="win-window-body">
-        <h3 style="margin-bottom: 20px; text-align: center;">Последние видео с канала:</h3>
+    <div class="win-window-body" style="padding: 0; overflow: hidden;">
+        <!-- Градиентные маски по бокам добавлены через CSS -->
         <div class="youtube-circular-grid" id="youtube-feed">
-            <!-- Скелетоны для загрузки -->
-            <div class="video-skeleton"></div>
-            <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
@@ -225,7 +222,7 @@
     }
 
     /* ============================================================
-       YOUTUBE (КАРУСЕЛЬ + WORKER + АВТО-ПРОКРУТКА)
+       YOUTUBE (БЕСКОНЕЧНАЯ КАРУСЕЛЬ)
     ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
@@ -246,13 +243,15 @@
                 throw new Error('Воркер вернул пустой массив.');
             }
 
+            // Ограничиваем до 20 последних видео, чтобы страница не тормозила
+            const limit = Math.min(videos.length, 20);
             let html = '';
-            for (let i = 0; i < Math.min(videos.length, 7); i++) {
+
+            for (let i = 0; i < limit; i++) {
                 const video = videos[i];
                 const thumbnail = `https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`;
-
                 html += `
-                    <div class="video-item win-inset" style="--i: ${i};">
+                    <div class="video-item win-inset">
                         <div class="video-thumbnail">
                             <img src="${thumbnail}" alt="${escapeHtml(video.title)}" loading="lazy">
                             <div class="play-overlay">▶</div>
@@ -262,7 +261,9 @@
                     </div>
                 `;
             }
-            container.innerHTML = html;
+
+            // ДУБЛИРУЕМ HTML, чтобы создать бесконечную ленту
+            container.innerHTML = html + html;
             initYouTubeCarousel();
 
         } catch (err) {
@@ -278,63 +279,39 @@
         }
     }
 
-    // --- АВТО-ПРОКРУТКА И РУЧНОЕ УПРАВЛЕНИЕ ---
-    let autoScrollInterval = null;
+    // --- БЕСКОНЕЧНАЯ АВТО-ПРОКРУТКА ---
+    let isHovered = false;
+    let animationId = null;
 
     function initYouTubeCarousel() {
         const feed = document.getElementById('youtube-feed');
         if (!feed) return;
 
-        feed.removeEventListener('wheel', handleWheelScroll);
-        feed.removeEventListener('mouseenter', stopAutoScroll);
-        feed.removeEventListener('mouseleave', startAutoScroll);
+        feed.addEventListener('mouseenter', () => { isHovered = true; });
+        feed.addEventListener('mouseleave', () => { isHovered = false; });
 
-        feed.addEventListener('wheel', handleWheelScroll, { passive: false });
-        feed.addEventListener('mouseenter', stopAutoScroll);
-        feed.addEventListener('mouseleave', startAutoScroll);
+        feed.scrollLeft = 0;
+        if (animationId) cancelAnimationFrame(animationId);
 
-        startAutoScroll();
-    }
+        function autoScroll() {
+            if (!feed) return;
 
-    function startAutoScroll() {
-        const feed = document.getElementById('youtube-feed');
-        if (!feed || autoScrollInterval) return;
-
-        autoScrollInterval = setInterval(() => {
-            // Если доскроллили до конца (или почти до конца), плавно возвращаемся в начало
-            if (feed.scrollLeft + feed.clientWidth >= feed.scrollWidth - 1) {
-                feed.scrollLeft = 0;
-            } else {
-                feed.scrollLeft += 1; // Скорость (1 пиксель за тик)
+            // Если мышка не наведена, крутим
+            if (!isHovered) {
+                feed.scrollLeft += 2; // Скорость прокрутки (2 пикселя за кадр)
             }
-        }, 30); // 30 мс (около 33 пикселей в секунду)
-    }
 
-    function stopAutoScroll() {
-        if (autoScrollInterval) {
-            clearInterval(autoScrollInterval);
-            autoScrollInterval = null;
+            // Логика "колеса": когда доходим до половины, мгновенно сдвигаем в начало
+            if (feed.scrollLeft >= feed.scrollWidth / 2) {
+                feed.scrollLeft -= feed.scrollWidth / 2;
+            } else if (feed.scrollLeft <= 0) {
+                feed.scrollLeft += feed.scrollWidth / 2;
+            }
+
+            animationId = requestAnimationFrame(autoScroll);
         }
-    }
 
-    function handleWheelScroll(evt) {
-        if (evt.deltaY !== 0) {
-            evt.preventDefault();
-            const feed = evt.currentTarget;
-
-            stopAutoScroll();
-            clearTimeout(feed._resumeTimeout);
-
-            // Возобновляем авто-прокрутку через 3 секунды после того, как пользователь перестал крутить колесико
-            feed._resumeTimeout = setTimeout(() => {
-                startAutoScroll();
-            }, 3000);
-
-            feed.scrollBy({
-                left: evt.deltaY * 1.5,
-                behavior: 'smooth'
-            });
-        }
+        animationId = requestAnimationFrame(autoScroll);
     }
 
     /* ============================================================
