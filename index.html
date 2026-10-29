@@ -116,6 +116,7 @@
     <div class="win-window-body">
         <h3 style="margin-bottom: 20px; text-align: center;">Последние видео с канала:</h3>
         <div class="youtube-circular-grid" id="youtube-feed">
+            <!-- Скелетоны для загрузки -->
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
@@ -224,7 +225,7 @@
     }
 
     /* ============================================================
-       YOUTUBE (ЧЕРЕЗ CLOUDFLARE WORKER)
+       YOUTUBE (КАРУСЕЛЬ + WORKER + АВТО-ПРОКРУТКА)
     ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
@@ -242,7 +243,7 @@
             const videos = await response.json();
 
             if (!Array.isArray(videos) || videos.length === 0) {
-                throw new Error('Воркер вернул пустой массив. Возможно, YouTube блокирует запросы.');
+                throw new Error('Воркер вернул пустой массив.');
             }
 
             let html = '';
@@ -262,17 +263,77 @@
                 `;
             }
             container.innerHTML = html;
+            initYouTubeCarousel();
 
         } catch (err) {
             console.warn('YouTube Fetch error:', err);
             container.innerHTML = `
-                <div class="win-inset empty-state" style="grid-column: 1 / -1;">
+                <div class="win-inset empty-state" style="width: 100%; margin: 0 auto;">
                     📺 Не удалось загрузить видео.<br>
                     <small>Причина: ${err.message}</small>
                     <br><br>
                     <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
                 </div>
             `;
+        }
+    }
+
+    // --- АВТО-ПРОКРУТКА И РУЧНОЕ УПРАВЛЕНИЕ ---
+    let autoScrollInterval = null;
+
+    function initYouTubeCarousel() {
+        const feed = document.getElementById('youtube-feed');
+        if (!feed) return;
+
+        feed.removeEventListener('wheel', handleWheelScroll);
+        feed.removeEventListener('mouseenter', stopAutoScroll);
+        feed.removeEventListener('mouseleave', startAutoScroll);
+
+        feed.addEventListener('wheel', handleWheelScroll, { passive: false });
+        feed.addEventListener('mouseenter', stopAutoScroll);
+        feed.addEventListener('mouseleave', startAutoScroll);
+
+        startAutoScroll();
+    }
+
+    function startAutoScroll() {
+        const feed = document.getElementById('youtube-feed');
+        if (!feed || autoScrollInterval) return;
+
+        autoScrollInterval = setInterval(() => {
+            // Если доскроллили до конца (или почти до конца), плавно возвращаемся в начало
+            if (feed.scrollLeft + feed.clientWidth >= feed.scrollWidth - 1) {
+                feed.scrollLeft = 0;
+            } else {
+                feed.scrollLeft += 1; // Скорость (1 пиксель за тик)
+            }
+        }, 30); // 30 мс (около 33 пикселей в секунду)
+    }
+
+    function stopAutoScroll() {
+        if (autoScrollInterval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+    }
+
+    function handleWheelScroll(evt) {
+        if (evt.deltaY !== 0) {
+            evt.preventDefault();
+            const feed = evt.currentTarget;
+
+            stopAutoScroll();
+            clearTimeout(feed._resumeTimeout);
+
+            // Возобновляем авто-прокрутку через 3 секунды после того, как пользователь перестал крутить колесико
+            feed._resumeTimeout = setTimeout(() => {
+                startAutoScroll();
+            }, 3000);
+
+            feed.scrollBy({
+                left: evt.deltaY * 1.5,
+                behavior: 'smooth'
+            });
         }
     }
 

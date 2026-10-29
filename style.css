@@ -26,18 +26,10 @@
     --input-bg: rgba(255, 255, 255, 0.1); --accent: #5a9cff; --glow: 0 0 40px rgba(90, 156, 255, 0.3);
 }
 :root[data-theme="win1"] {
-    --bg-color: #00aaaa; /* Классический бирюзовый CGA */
-    --window-bg: #ffffff;
-    --text-color: #000000;
-    --text-muted: #555555;
-    --title-bg: #ffffff;
-    --title-text: #000000;
-    --border-light: #ffffff;
-    --border-dark: #000000;
-    --border-darkest: #000000;
-    --input-bg: #ffffff;
-    --accent: #000000;
-    --glow: none;
+    --bg-color: #00aaaa; --window-bg: #ffffff; --text-color: #000000; --text-muted: #555555;
+    --title-bg: #ffffff; --title-text: #000000;
+    --border-light: #ffffff; --border-dark: #000000; --border-darkest: #000000;
+    --input-bg: #ffffff; --accent: #000000; --glow: none;
 }
 
 /* =========================================================
@@ -67,10 +59,10 @@ body {
 :root[data-theme="vista"] .win-inset { background: rgba(0, 0, 0, 0.3) !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 3px; }
 :root[data-theme="vista"] .win-taskbar { background: rgba(30, 60, 100, 0.8) !important; backdrop-filter: blur(10px); border-top: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5); }
 
-/* WINDOWS 1.0 (Строгий черно-белый) */
+/* WINDOWS 1.0 */
 :root[data-theme="win1"] .win-window { border: 2px solid #000000 !important; box-shadow: none !important; padding: 0 !important; border-radius: 0 !important; }
 :root[data-theme="win1"] .win-title-bar { border-bottom: 2px solid #000000 !important; padding: 4px 6px !important; background: #ffffff !important; }
-:root[data-theme="win1"] .win-title-controls { display: none; /* В Win 1.0 не было кнопок в заголовке */ }
+:root[data-theme="win1"] .win-title-controls { display: none; }
 :root[data-theme="win1"] .win-btn { border: 2px solid #000000 !important; box-shadow: none !important; border-radius: 0 !important; transform: none !important; background: #ffffff !important; color: #000 !important; }
 :root[data-theme="win1"] .win-btn:active { background-color: #000000 !important; color: #ffffff !important; }
 :root[data-theme="win1"] .win-inset { border: 2px solid #000000 !important; background: #ffffff !important; border-radius: 0 !important; }
@@ -164,10 +156,42 @@ body {
 :root[data-theme="vista"] .pip.filled { background-color: #5a9cff; box-shadow: 0 0 10px rgba(90, 156, 255, 0.8); }
 
 /* =========================================================
-   YOUTUBE CIRCULAR GRID
+   YOUTUBE GRID (КАРУСЕЛЬ)
 ========================================================= */
-.youtube-circular-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 10px; justify-items: center; }
-.video-item { position: relative; width: 100%; max-width: 240px; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px; border-radius: 12px; overflow: hidden; animation: videoPop 0.6s cubic-bezier(.2, .8, .3, 1) both; animation-delay: calc(var(--i) * 0.1s + 0.5s); transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+.youtube-circular-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px 5%; /* Немного отступа по краям */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Скрываем скроллбар Firefox */
+    -ms-overflow-style: none; /* Скрываем скроллбар IE/Edge */
+    cursor: grab;
+}
+.youtube-circular-grid::-webkit-scrollbar {
+    display: none; /* Скрываем скроллбар Chrome/Safari */
+}
+.youtube-circular-grid:active {
+    cursor: grabbing;
+}
+
+.video-item {
+    position: relative;
+    flex: 0 0 240px; /* Жестко фиксируем ширину карточки */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: videoPop 0.6s cubic-bezier(.2, .8, .3, 1) both;
+    animation-delay: calc(var(--i) * 0.1s + 0.5s);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    scroll-snap-align: center; /* Прилипание к центру */
+}
 .video-item:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.3); z-index: 10; }
 .video-thumbnail { width: 100%; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; position: relative; border: 2px solid var(--border-darkest); background: #000; }
 .video-thumbnail img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
@@ -176,9 +200,9 @@ body {
 .video-item:hover .play-overlay { opacity: 1; }
 .video-title { margin-top: 10px; font-size: 13px; font-weight: bold; line-height: 1.3; color: var(--text-color); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; width: 100%; }
 .video-link { position: absolute; inset: 0; z-index: 5; }
-.video-skeleton { width: 100%; max-width: 240px; aspect-ratio: 16 / 9; background: var(--window-bg); border: 2px solid var(--border-dark); border-radius: 8px; position: relative; overflow: hidden; animation: fadeUp 0.5s ease; }
+.video-skeleton { flex: 0 0 240px; aspect-ratio: 16 / 9; background: var(--window-bg); border: 2px solid var(--border-dark); border-radius: 8px; position: relative; overflow: hidden; animation: fadeUp 0.5s ease; }
 .video-skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(128, 128, 128, .15) 50%, transparent 100%); animation: skeletonSweep 1.4s infinite; }
-.empty-state { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 13px; }
+.empty-state { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 13px; width: 100%; }
 
 /* =========================================================
    GITHUB REPOS
@@ -232,7 +256,7 @@ body {
     .typewriter { font-size: 1.6rem; }
     .taskbar-item { max-width: 100px; }
     .user-card-key { min-width: 70px; }
-    .youtube-circular-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .video-item { flex: 0 0 200px; }
     .video-title { font-size: 11px; }
     .pip { width: 10px; height: 10px; }
 }
