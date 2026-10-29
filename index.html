@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Портфолио БЕЛОГО (whiteYT) — 3D-художника, рендермейкера и Java-моддера по Minecraft. Ретро-интерфейс в стиле Windows 95.">
+    <meta name="description" content="Портфолио БЕЛОГО (whiteYT) — 3D-художника, рендермейкера и Java-моддера по Minecraft. Ретро-интерфейс.">
     <title>БЕЛЫЙ | Operating System v95</title>
-    <!-- Убираем ошибку favicon.ico -->
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
-    <!-- Подключаем Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <!-- ================= THEME BAR ================= -->
-<div class="theme-bar win-window win-load-anim">
+<div class="theme-bar win-window win-load-anim" style="--delay: 0s;">
     <div class="win-title-bar"><div class="win-title-text">Shell_Manager.exe</div></div>
     <div class="theme-buttons">
         <button class="win-btn active" data-theme-name="win95" aria-pressed="true"  onclick="setTheme('win95', this)">📟 Windows 95</button>
@@ -24,7 +21,7 @@
 </div>
 
 <!-- ================= HERO ================= -->
-<main class="win-window main-window win-load-anim" style="--anim-delay:.1s;" data-window-title="БЕЛЫЙ.exe">
+<main class="win-window main-window win-load-anim" style="--delay: 0.15s;" data-window-title="БЕЛЫЙ.exe">
     <div class="win-title-bar">
         <div class="win-title-text">C:\Windows\System32\БЕЛЫЙ.exe</div>
         <div class="win-title-controls">
@@ -35,110 +32,94 @@
     </div>
     <div class="win-window-body hero-container">
         <div class="hero-text">
-            <p class="win-subtitle">✦ 3D-художник · Рендермейкер · Java-моддер ✦</p>
-            <h1>Привет, я БЕЛЫЙ 👋</h1>
-            <p class="win-desc">3D-художник и рендермейкер по Майнкрафту. Делаю крутые рендеры, пишу Java-моды, снимаю видео и стримлю. Добро пожаловать в мою операционную систему!</p>
+            <p class="win-subtitle fade-up" style="--delay: 0.3s;">✦ 3D-художник · Рендермейкер · Java-моддер ✦</p>
+            <h1 class="typewriter">Привет, я БЕЛЫЙ 👋</h1>
+            <p class="win-desc fade-up" style="--delay: 0.6s;">3D-художник и рендермейкер по Майнкрафту. Делаю крутые рендеры, пишу Java-моды, снимаю видео и стримлю. Добро пожаловать в мою операционную систему!</p>
 
-            <div class="win-inset user-card">
+            <div class="win-inset user-card fade-up" style="--delay: 0.8s;">
                 <div><span class="user-card-key">Ник:</span> БЕЛЫЙ</div>
                 <div><span class="user-card-key">ДР:</span> 16 января ♑ <em>Козерог</em></div>
                 <div><span class="user-card-key">Статус:</span> Если не злить — не укушу :3</div>
             </div>
 
-            <div class="social-grid">
-                <a href="https://t.me/podvalwhiteq"                target="_blank" rel="noopener noreferrer" class="win-btn social-btn tg">✈️ Telegram-канал</a>
+            <div class="social-grid fade-up" style="--delay: 1s;">
+                <a href="https://t.me/podvalwhiteq"                target="_blank" rel="noopener noreferrer" class="win-btn social-btn tg">✈️ Telegram</a>
                 <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" rel="noopener noreferrer" class="win-btn social-btn yt">▶️ YouTube</a>
                 <a href="https://www.twitch.tv/whiteyt456"         target="_blank" rel="noopener noreferrer" class="win-btn social-btn twitch">🎮 Twitch</a>
-                <a href="https://boosty.to/white10000"             target="_blank" rel="noopener noreferrer" class="win-btn social-btn boosty">🍜 Boosty (На дошик)</a>
+                <a href="https://boosty.to/white10000"             target="_blank" rel="noopener noreferrer" class="win-btn social-btn boosty">🍜 Boosty</a>
             </div>
         </div>
-        <div class="hero-image">
+        <div class="hero-image fade-in" style="--delay: 0.5s;">
             <img src="images/skin_main.png" alt="Скин БЕЛОГО" class="pixel-avatar" loading="eager">
         </div>
     </div>
 </main>
 
+<!-- ================= SKILLS ================= -->
+<section class="win-window skills-window win-load-anim" style="--delay: 0.3s;" data-window-title="My_Skills.sys">
+    <div class="win-title-bar">
+        <div class="win-title-text">C:\System\My_Skills.sys</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+        </div>
+    </div>
+    <div class="win-window-body">
+        <h3 style="margin-bottom: 20px;">Уровень мастерства:</h3>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-label"><span>3D Рендеры (Blender)</span> <span>95%</span></div>
+                <div class="win-progress-bar"><div class="win-progress-fill" style="width: 95%;"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-label"><span>Java (Minecraft Mods)</span> <span>80%</span></div>
+                <div class="win-progress-bar"><div class="win-progress-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-label"><span>Видеомонтаж / Стриминг</span> <span>90%</span></div>
+                <div class="win-progress-bar"><div class="win-progress-fill" style="width: 90%;"></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= YOUTUBE VIDEOS ================= -->
+<section class="win-window portfolio-window win-load-anim" style="--delay: 0.45s;" data-window-title="YouTube_Feed.exe">
+    <div class="win-title-bar">
+        <div class="win-title-text">C:\Media\YouTube_Feed.exe</div>
+        <div class="win-title-controls">
+            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
+            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
+        </div>
+    </div>
+    <div class="win-window-body">
+        <h3 style="margin-bottom: 20px; text-align: center;">Последние видео с канала:</h3>
+        <div class="youtube-circular-grid" id="youtube-feed">
+            <!-- Сюда будут загружаться видео -->
+            <div class="video-skeleton"></div>
+            <div class="video-skeleton"></div>
+            <div class="video-skeleton"></div>
+            <div class="video-skeleton"></div>
+            <div class="video-skeleton"></div>
+        </div>
+    </div>
+</section>
+
 <!-- ================= GITHUB REPOS ================= -->
-<section class="win-window portfolio-window win-load-anim" style="--anim-delay:.2s;" data-window-title="GitHub_Projects.lnk">
+<section class="win-window portfolio-window win-load-anim" style="--delay: 0.6s;" data-window-title="GitHub_Projects.lnk">
     <div class="win-title-bar">
         <div class="win-title-text">A:\GitHub_Projects.lnk</div>
         <div class="win-title-controls">
             <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-            <button class="win-control-btn" title="Развернуть">🗖</button>
             <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
         </div>
     </div>
     <div class="win-window-body">
         <h3 style="margin-bottom:15px;">
             Репозитории на GitHub (@white-white519):
-            <button class="win-btn refresh-gh-btn" onclick="refreshGitHubRepos()" title="Обновить с GitHub">🔄 Обновить</button>
+            <button class="win-btn refresh-gh-btn" onclick="refreshGitHubRepos()" title="Обновить">🔄 Обновить</button>
         </h3>
         <div class="github-repos-grid" id="github-repos"></div>
-    </div>
-</section>
-
-<!-- ================= GALLERY ================= -->
-<section class="win-window portfolio-window win-load-anim" style="--anim-delay:.4s;" id="gallery-section" data-window-title="Gallery.folder">
-    <div class="win-title-bar">
-        <div class="win-title-text">C:\Graphics\Gallery.folder</div>
-        <div class="win-title-controls">
-            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
-        </div>
-    </div>
-    <div class="win-window-body">
-        <div class="gallery-tabs" role="tablist">
-            <button class="win-btn active" data-gallery-tab="portfolio" role="tab"
-                    onclick="switchGalleryTab('portfolio', this)">
-                🎨 Работы БЕЛОГО <span class="tab-badge" id="badge-portfolio">0</span>
-            </button>
-            <button class="win-btn" data-gallery-tab="community" role="tab"
-                    onclick="switchGalleryTab('community', this)">
-                👥 Творчество подписчиков <span class="tab-badge" id="badge-community">0</span>
-            </button>
-        </div>
-
-        <div id="gallery-portfolio" role="tabpanel">
-            <div class="portfolio-grid" id="portfolio-gallery"></div>
-            <div class="win-inset empty-state" id="portfolio-empty">
-                📁 Портфолио пока пустое.<br>
-                <small>Работы БЕЛОГО появятся здесь совсем скоро.</small>
-            </div>
-        </div>
-
-        <div id="gallery-community" style="display:none;" role="tabpanel">
-            <div class="portfolio-grid" id="approved-gallery"></div>
-            <div class="win-inset empty-state" id="community-empty">
-                📭 Пока нет одобренных работ от подписчиков.<br>
-                <small>Отправь свой арт через форму ниже — и он появится здесь после проверки.</small>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ================= UPLOAD ================= -->
-<section class="win-window upload-window win-load-anim" style="--anim-delay:.5s;" data-window-title="Upload_Wizard.exe">
-    <div class="win-title-bar">
-        <div class="win-title-text">Upload_Wizard_v1.0.exe</div>
-        <div class="win-title-controls">
-            <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
-            <button class="win-control-btn close-btn" title="Закрыть" onclick="minimizeWindow(this.closest('.win-window'))">X</button>
-        </div>
-    </div>
-    <div class="win-window-body upload-box">
-        <div class="win-progress-bar" id="winProgress" style="display:none;" aria-hidden="true">
-            <div class="win-progress-fill" id="winProgressFill"></div>
-        </div>
-        <h3>Предложить свой арт на сайт 🎨</h3>
-        <p>Ваш ник попадёт в титры и в категорию «Творчество подписчиков» после проверки БЕЛЫМ.</p>
-        <form id="renderForm" class="upload-form" novalidate>
-            <input type="text" id="authorName" class="win-input" placeholder="Твой игровой ник" required maxlength="40" autocomplete="nickname">
-            <input type="text" id="artTitle"   class="win-input" placeholder="Название рендера" required maxlength="80">
-            <label for="file-upload" class="win-btn file-label" id="file-label" tabindex="0" role="button">📎 Выбрать файл изображения</label>
-            <input id="file-upload" type="file" accept="image/*" required>
-            <button type="submit" class="win-btn submit-btn">Загрузить арт в систему</button>
-            <div id="formError" class="form-error" style="display:none;" role="alert"></div>
-        </form>
     </div>
 </section>
 
@@ -149,7 +130,7 @@
         <div class="win-title-controls">
             <button class="win-control-btn" title="Свернуть" onclick="minimizeWindow(this.closest('.win-window'))">_</button>
             <button class="win-control-btn" title="Очистить" onclick="termClear()">🗖</button>
-            <button class="win-control-btn close-btn" title="Выйти (theme win95)" onclick="termRun('exit')">X</button>
+            <button class="win-control-btn close-btn" title="Выйти" onclick="termRun('exit')">X</button>
         </div>
     </div>
     <div class="win-window-body terminal-body">
@@ -157,8 +138,7 @@
         <div class="terminal-prompt-line">
             <span class="terminal-prompt" id="terminal-prompt">user@arch:~$</span>
             <input type="text" id="terminal-input" class="terminal-input"
-                   autocomplete="off" spellcheck="false"
-                   aria-label="Терминал: введите команду">
+                   autocomplete="off" spellcheck="false" aria-label="Терминал">
         </div>
     </div>
 </section>
@@ -171,51 +151,14 @@
 </div>
 
 <footer class="site-footer">
-    <p>БЕЛЫЙ OS [Version 95.2026.10]
-        <a href="admin.html" title="Только для БЕЛОГО" aria-label="Админ-панель">•</a>
-    </p>
+    <p>БЕЛЫЙ OS [Version 95.2026.10] • Made with ❤️</p>
 </footer>
-
-<div id="image-modal" class="modal-overlay" style="display:none;">
-    <div class="win-window modal-window">
-        <div class="win-title-bar">
-            <div class="win-title-text" id="modalTitle">Preview.exe</div>
-            <div class="win-title-controls">
-                <button class="win-control-btn close-btn" onclick="closeModal()">X</button>
-            </div>
-        </div>
-        <div class="win-window-body modal-body">
-            <img id="modalImage" src="" alt="">
-        </div>
-    </div>
-</div>
 
 <script>
     /* ============================================================
-       ⚙️ НАСТРОЙКИ SUPABASE (ПЕРЕИМЕНОВАНО В supabaseClient)
+       ⚙️ ID КАНАЛА YOUTUBE (ВСТАВЛЕН ТВОЙ ID)
     ============================================================ */
-    const SUPABASE_URL = 'https://iqyoopklaeaeiltgdmqiz.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeW9vcGtsYWVlaWx0Z2RtaXF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMTI2NjksImV4cCI6MjEwODc4ODY2OX0.HDTMx-fNBaWT-BDpxmyCXLmQE8J6V4wpiaxWcdcnZ2U'; // <--- ЗАМЕНИ ЭТО НА СВОЙ ANON KEY
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    /* ============================================================
-       УТИЛИТЫ
-    ============================================================ */
-    function escapeHtml(str) {
-        return String(str ?? '').replace(/[&<>"']/g, ch => ({
-            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-        })[ch]);
-    }
-    function showError(msg) {
-        const box = document.getElementById('formError');
-        box.textContent = '⚠️ ' + msg;
-        box.style.display = 'block';
-    }
-    function clearError() {
-        const box = document.getElementById('formError');
-        box.style.display = 'none';
-        box.textContent = '';
-    }
+    const YT_CHANNEL_ID = 'UClRZ_X9qhqv14H53-g9qfrQ';
 
     /* ============================================================
        ТЕМЫ
@@ -227,11 +170,13 @@
         if (!AVAILABLE_THEMES.includes(name)) name = 'win95';
         document.documentElement.setAttribute('data-theme', name);
         try { localStorage.setItem(THEME_KEY, name); } catch (e) {}
+
         document.querySelectorAll('.theme-buttons .win-btn').forEach(b => {
             const isActive = b.dataset.themeName === name;
             b.classList.toggle('active', isActive);
             b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
+
         if (name === 'arch') {
             setTimeout(() => {
                 initTerminal();
@@ -244,6 +189,7 @@
         let saved = 'win95';
         try { saved = localStorage.getItem(THEME_KEY) || 'win95'; } catch (e) {}
         if (!AVAILABLE_THEMES.includes(saved)) saved = 'win95';
+
         document.documentElement.setAttribute('data-theme', saved);
         document.querySelectorAll('.theme-buttons .win-btn').forEach(b => {
             const isActive = b.dataset.themeName === saved;
@@ -254,204 +200,66 @@
     }
 
     /* ============================================================
-       СЖАТИЕ
+       YOUTUBE RSS FEED
     ============================================================ */
-    const MAX_FILE_SIZE = 8 * 1024 * 1024;
-    const MAX_DIMENSION = 1024;
-    const JPEG_QUALITY  = 0.82;
-
-    function readAsDataURL(file) {
-        return new Promise((resolve, reject) => {
-            const r = new FileReader();
-            r.onload = () => resolve(r.result);
-            r.onerror = () => reject(new Error('Не удалось прочитать файл'));
-            r.readAsDataURL(file);
-        });
-    }
-    function loadImage(src) {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.onerror = () => reject(new Error('Файл не является изображением'));
-            img.src = src;
-        });
-    }
-    async function compressImage(file) {
-        const dataUrl = await readAsDataURL(file);
-        const img = await loadImage(dataUrl);
-        let { width, height } = img;
-        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-            const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
-            width  = Math.round(width  * ratio);
-            height = Math.round(height * ratio);
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width; canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(img, 0, 0, width, height);
-        let result = canvas.toDataURL('image/webp', JPEG_QUALITY);
-        if (!result.startsWith('data:image/webp')) {
-            ctx.globalCompositeOperation = 'destination-over';
-            ctx.fillStyle = '#0f0f13';
-            ctx.fillRect(0, 0, width, height);
-            result = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
-        }
-        return result;
+    function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, ch => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[ch]);
     }
 
-    /* ============================================================
-       ОТПРАВКА АРТА В SUPABASE (supabaseClient)
-    ============================================================ */
-    async function handleSubmit(e) {
-        e.preventDefault();
-        clearError();
-
-        const fileInput = document.getElementById('file-upload');
-        const file  = fileInput.files[0];
-        const name  = document.getElementById('authorName').value.trim();
-        const title = document.getElementById('artTitle').value.trim();
-
-        if (!name)  return showError('Укажи свой ник.');
-        if (!title) return showError('Укажи название рендера.');
-        if (!file)  return showError('Выбери файл изображения.');
-        if (!file.type.startsWith('image/')) return showError('Файл должен быть изображением.');
-        if (file.size > MAX_FILE_SIZE) {
-            return showError(`Файл больше ${MAX_FILE_SIZE / 1024 / 1024} МБ. Сожми его и попробуй снова.`);
-        }
-
-        const progress  = document.getElementById('winProgress');
-        const fill      = document.getElementById('winProgressFill');
-        const submitBtn = e.target.querySelector('.submit-btn');
-
-        progress.style.display = 'block';
-        fill.style.width = '10%';
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Обработка...';
+    async function loadYouTubeVideos() {
+        const container = document.getElementById('youtube-feed');
+        if (!container) return;
 
         try {
-            const compressedDataUrl = await compressImage(file);
-            fill.style.width = '50%';
+            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`;
+            // Используем CORS-прокси, так как YouTube не отдаёт XML напрямую в браузер
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
 
-            const blob = await (await fetch(compressedDataUrl)).blob();
-            const filePath = `public/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error('Network error');
+            const text = await response.text();
 
-            const { data: uploadData, error: uploadError } = await supabaseClient.storage
-                .from('renders')
-                .upload(filePath, blob, { contentType: 'image/webp' });
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(text, 'text/xml');
+            const entries = xmlDoc.querySelectorAll('entry');
 
-            if (uploadError) throw new Error('Ошибка загрузки файла: ' + uploadError.message);
-            fill.style.width = '80%';
+            if (entries.length === 0) throw new Error('No videos found');
 
-            const { data: { publicUrl } } = supabaseClient.storage
-                .from('renders')
-                .getPublicUrl(filePath);
+            let html = '';
+            // Берём только первые 7 видео
+            for (let i = 0; i < Math.min(entries.length, 7); i++) {
+                const entry = entries[i];
+                const title = entry.querySelector('title').textContent;
+                const videoId = entry.querySelector('yt\\:videoId').textContent;
+                const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
-            const { error: dbError } = await supabaseClient
-                .from('renders')
-                .insert([{ name, title, image_url: publicUrl, status: 'pending' }]);
-
-            if (dbError) throw new Error('Ошибка сохранения в БД: ' + dbError.message);
-            fill.style.width = '100%';
-
-            setTimeout(() => {
-                progress.style.display = 'none';
-                fill.style.width = '0%';
-                alert('✅ Файл отправлен на модерацию!');
-                e.target.reset();
-                document.getElementById('file-label').textContent = '📎 Выбрать файл изображения';
-                clearError();
-            }, 450);
-        } catch (err) {
-            progress.style.display = 'none';
-            fill.style.width = '0%';
-            showError(err.message || 'Не удалось обработать файл.');
-            console.error(err);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Загрузить арт в систему';
-        }
-    }
-
-    /* ============================================================
-       ГАЛЕРЕЯ ИЗ SUPABASE (supabaseClient)
-    ============================================================ */
-    function switchGalleryTab(name, btn) {
-        document.querySelectorAll('.gallery-tabs .win-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('gallery-portfolio').style.display = name === 'portfolio' ? '' : 'none';
-        document.getElementById('gallery-community').style.display = name === 'community' ? '' : 'none';
-    }
-
-    function renderGalleryItems(items, authorOverride) {
-        return items.map((item, i) => {
-            const authorHtml = authorOverride
-                ? `<p>🎨 ${escapeHtml(authorOverride)}</p>`
-                : `<p>Автор: ${escapeHtml(item.name || 'Аноним')}</p>`;
-            return `
-                <div class="portfolio-item win-inset" style="--item-i:${i};">
-                    <img src="${item.image_url}" alt="${escapeHtml(item.title)}" loading="lazy">
-                    <div class="item-overlay">
-                        <h3>${escapeHtml(item.title)}</h3>
-                        ${authorHtml}
+                html += `
+                    <div class="video-item win-inset" style="--i: ${i};">
+                        <div class="video-thumbnail">
+                            <img src="${thumbnail}" alt="${escapeHtml(title)}" loading="lazy">
+                            <div class="play-overlay">▶</div>
+                        </div>
+                        <div class="video-title">${escapeHtml(title)}</div>
+                        <a href="${videoUrl}" target="_blank" rel="noopener noreferrer" class="video-link"></a>
                     </div>
+                `;
+            }
+            container.innerHTML = html;
+
+        } catch (err) {
+            console.warn('YouTube RSS Error:', err);
+            container.innerHTML = `
+                <div class="win-inset empty-state" style="grid-column: 1 / -1;">
+                    📺 Не удалось загрузить видео.<br>
+                    <small>Проверьте настройки или перейдите на канал напрямую.</small>
+                    <br><br>
+                    <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
                 </div>
             `;
-        }).join('');
-    }
-
-    async function loadGallery() {
-        const { data: allRenders, error } = await supabaseClient
-            .from('renders')
-            .select('*')
-            .eq('status', 'approved')
-            .order('created_at', { ascending: false });
-
-        if (error) {
-            console.error('Ошибка загрузки галереи:', error);
-            return;
         }
-
-        const portfolio = allRenders.filter(r => r.name === 'БЕЛЫЙ');
-        const approved = allRenders.filter(r => r.name !== 'БЕЛЫЙ');
-
-        const pg = document.getElementById('portfolio-gallery');
-        const pe = document.getElementById('portfolio-empty');
-        document.getElementById('badge-portfolio').textContent = portfolio.length;
-        if (portfolio.length) {
-            pe.style.display = 'none';
-            pg.innerHTML = renderGalleryItems(portfolio, 'БЕЛЫЙ');
-        } else {
-            pe.style.display = '';
-            pg.innerHTML = '';
-        }
-
-        const cg = document.getElementById('approved-gallery');
-        const ce = document.getElementById('community-empty');
-        document.getElementById('badge-community').textContent = approved.length;
-        if (approved.length) {
-            ce.style.display = 'none';
-            cg.innerHTML = renderGalleryItems(approved);
-        } else {
-            ce.style.display = '';
-            cg.innerHTML = '';
-        }
-    }
-
-    /* ============================================================
-       МОДАЛКА
-    ============================================================ */
-    function openModal(title, src) {
-        document.getElementById('modalTitle').textContent = title || 'Preview.exe';
-        document.getElementById('modalImage').src = src;
-        document.getElementById('image-modal').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-    function closeModal() {
-        document.getElementById('image-modal').style.display = 'none';
-        document.getElementById('modalImage').src = '';
-        document.body.style.overflow = '';
     }
 
     /* ============================================================
@@ -464,17 +272,12 @@
 
     const LANG_ICONS = {
         'Java': '☕', 'JavaScript': '⚡', 'TypeScript': '🔷',
-        'HTML': '🌐', 'CSS': '🎨', 'SCSS': '🎨',
-        'Python': '🐍', 'C++': '🔧', 'C': '🔧', 'C#': '🎯',
-        'Rust': '🦀', 'Go': '🐹', 'Kotlin': '🟣', 'Swift': '🕊',
-        'GDScript': '🎮', 'Lua': '🌙', 'Shell': '🐚',
-        'PHP': '🐘', 'Ruby': '💎', 'Vue': '💚', 'Svelte': '🧡',
-        'Batchfile': '📜', 'PowerShell': '💠'
+        'HTML': '🌐', 'CSS': '🎨', 'Python': '🐍', 'C++': '🔧'
     };
 
     const FALLBACK_REPOS = [
         { name: 'Soul_Fracture',  language: 'Java',       description: 'Мод на выживание в Minecraft...', html_url: '#' },
-        { name: 'Idea-app',       language: 'JavaScript', description: 'Программное обеспечение для стримеров...', html_url: '#' }
+        { name: 'Idea-app',       language: 'JavaScript', description: 'ПО для стримеров (прототип)...', html_url: '#' }
     ];
 
     function renderRepoCard(repo, i) {
@@ -483,7 +286,7 @@
         const tagHtml = (repo.language ? `<span>${escapeHtml(repo.language)}</span>` : '')
             + (repo.stargazers_count > 0 ? `<span>⭐ ${repo.stargazers_count}</span>` : '');
         return `
-            <div class="repo-card win-inset" style="--item-i:${i || 0};">
+            <div class="repo-card win-inset" style="--i:${i};">
                 <div class="repo-header"><span class="repo-icon">${icon}</span><h4>${escapeHtml(repo.name)}</h4></div>
                 <p class="repo-desc">${escapeHtml(desc)}</p>
                 <div class="repo-tags">${tagHtml}</div>
@@ -511,13 +314,16 @@
                 return;
             }
         } catch (e) {}
-        container.innerHTML = Array(4).fill(0).map(() => '<div class="repo-card skeleton win-inset"></div>').join('');
+
+        container.innerHTML = Array(4).fill(0).map((_, i) => `<div class="repo-card skeleton win-inset" style="--i:${i};"></div>`).join('');
+
         try {
             const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`);
-            if (!res.ok) throw new Error('GitHub API Error');
+            if (!res.ok) throw new Error('API Error');
             const repos = await res.json();
             const filtered = repos.filter(r => !r.fork && !r.archived).sort(sortRepos);
-            if (!filtered.length) throw new Error('Empty list');
+            if (!filtered.length) throw new Error('Empty');
+
             const html = filtered.map((r, i) => renderRepoCard(r, i)).join('');
             container.innerHTML = html;
             try { sessionStorage.setItem(GH_CACHE_KEY, JSON.stringify({ ts: Date.now(), html })); } catch (e) {}
@@ -539,10 +345,8 @@
     let terminalInitialized = false;
     const TERM_DIRS = ['/', '/portfolio', '/repos', '/upload'];
     const TERM_FILES = {
-        '/bio.txt': `Имя: БЕЛЫЙ\nДР: 16 января (Козерог ♑)\nРоль: 3D-художник, рендермейкер, Java-моддер\nСтатус: Если не злить — не укушу :3`,
-        '/contacts.txt': `Telegram : https://t.me/podvalwhiteq\nYouTube  : https://www.youtube.com/@HospitalwhiteYT\nTwitch   : https://www.twitch.tv/whiteyt456\nBoosty   : https://boosty.to/white10000`,
-        '/README.md': `# БЕЛЫЙ OS · Arch Terminal\n\nЭто пасхалка. Но команды работают!\nПопробуй: ls, cd, cat bio.txt, neofetch`,
-        '/upload/submit.sh': `#!/bin/bash\necho "Прокрути страницу вверх и найди Upload_Wizard.exe"\n`
+        '/bio.txt': `Имя: БЕЛЫЙ\nДР: 16 января (Козерог ♑)\nРоль: 3D-художник, рендермейкер\nСтатус: Если не злить — не укушу :3`,
+        '/contacts.txt': `Telegram : https://t.me/podvalwhiteq\nYouTube  : https://www.youtube.com/@HospitalwhiteYT\nTwitch   : https://www.twitch.tv/whiteyt456`
     };
 
     function termPrint(text, cls) {
@@ -630,12 +434,13 @@
         if (!line) return;
         termHistory.push(line);
         termHistoryIdx = termHistory.length;
+
         const parts = line.split(/\s+/);
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
 
         switch (cmd) {
-            case 'help':      cmdHelp(); break;
+            case 'help':      termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue'); break;
             case 'ls':        cmdLs(args); break;
             case 'cd':        cmdCd(args); break;
             case 'pwd':       termPrint(termPath); break;
@@ -648,31 +453,20 @@
             default:          termPrint(`${cmd}: command not found. Type "help".`, 'red');
         }
     }
-    function cmdHelp() {
-        termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue');
-    }
     function cmdLs(args) {
         const target = args[0] ? resolveTermPath(args[0]) : termPath;
         if (target === '/') {
             ['portfolio/','repos/','upload/','bio.txt','contacts.txt','README.md'].forEach(i => termPrint(`  ${i}`, i.endsWith('/') ? 'blue' : 'green'));
-        } else if (target === '/portfolio') {
-            termPrint('  (смотрите на сайте)', 'muted');
-        } else if (target === '/repos') {
-            termPrint('  (смотрите на сайте)', 'muted');
-        } else if (target === '/upload') {
-            termPrint('  submit.sh', 'green');
-        } else {
-            termPrint(`ls: ${args[0]}: No such file`, 'red');
-        }
+        } else if (target === '/portfolio') { termPrint('  (смотрите на сайте)', 'muted');
+        } else if (target === '/repos') { termPrint('  (смотрите на сайте)', 'muted');
+        } else if (target === '/upload') { termPrint('  submit.sh', 'green');
+        } else { termPrint(`ls: ${args[0]}: No such file`, 'red'); }
     }
     function cmdCd(args) {
         if (!args.length) { termPath = '/'; updateTermPrompt(); return; }
         const newPath = resolveTermPath(args[0]);
-        if (TERM_DIRS.includes(newPath)) {
-            termPath = newPath; updateTermPrompt();
-        } else {
-            termPrint(`cd: ${args[0]}: No such directory`, 'red');
-        }
+        if (TERM_DIRS.includes(newPath)) { termPath = newPath; updateTermPrompt(); }
+        else { termPrint(`cd: ${args[0]}: No such directory`, 'red'); }
     }
     function cmdCat(args) {
         if (!args.length) return termPrint('cat: missing filename', 'red');
@@ -724,6 +518,7 @@
     }
     function minimizeWindow(el) { el.style.display = 'none'; renderTaskbar(); }
     function restoreAllWindows() { windowRegistry.forEach(w => { w.el.style.display = ''; }); renderTaskbar(); }
+
     function updateClock() {
         const el = document.getElementById('taskbarClock');
         if (!el) return;
@@ -736,38 +531,11 @@
         document.querySelectorAll('.win-window[data-window-title]').forEach(registerWindow);
         renderTaskbar();
 
-        const form = document.getElementById('renderForm');
-        if (form) form.addEventListener('submit', handleSubmit);
-
-        const fileInput = document.getElementById('file-upload');
-        const label = document.getElementById('file-label');
-        if (fileInput && label) {
-            fileInput.addEventListener('change', () => {
-                const f = fileInput.files[0];
-                label.textContent = f ? '📎 ' + f.name : '📎 Выбрать файл изображения';
-            });
-        }
-
-        loadGallery();
+        loadYouTubeVideos();
         loadGitHubRepos();
         initTerminal();
         updateClock();
         setInterval(updateClock, 60_000);
-
-        document.addEventListener('click', (e) => {
-            const item = e.target.closest('.portfolio-item');
-            if (!item) return;
-            const img = item.querySelector('img');
-            const title = item.querySelector('h3')?.textContent || 'Preview.exe';
-            if (img) openModal(title, img.src);
-        });
-
-        document.getElementById('image-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'image-modal') closeModal();
-        });
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
     });
 </script>
 </body>
