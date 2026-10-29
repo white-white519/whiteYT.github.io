@@ -71,7 +71,7 @@ body {
 @keyframes titleType { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes fadeUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
-@keyframes typewriter { from { width: 0; } to { width: 100%; } }
+@keyframes typewriter { from { width: 0; } to { width: 20ch; } } /* ИСПРАВЛЕНО: 20ch под длину текста */
 @keyframes blinkCursor { from, to { border-color: transparent; } 50% { border-color: var(--accent); } }
 @keyframes skeletonSweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 @keyframes blockMove { from { background-position: 0 0; } to { background-position: 12px 0; } }
@@ -97,19 +97,19 @@ body {
 :root[data-theme="win95"] .win-window:hover { box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), 2px 2px 0 var(--border-darkest); }
 :root[data-theme="arch"] .win-window:hover { box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), 0 0 12px rgba(23, 147, 209, .45); }
 
-.win-load-anim { animation: winOpenSmooth .6s cubic-bezier(.2, .8, .3, 1) backwards; animation-delay: var(--delay, 0s); }
-:root[data-theme="win95"] .win-load-anim { animation: win95Unroll .5s cubic-bezier(.4, 0, .2, 1) backwards; animation-delay: var(--delay, 0s); transform-origin: top center; }
-:root[data-theme="win95"] .win-load-anim .win-title-text { animation: titleType .6s steps(22, end) backwards; animation-delay: calc(var(--delay, 0s) + .2s); }
+.win-load-anim { animation: winOpenSmooth .6s cubic-bezier(.2, .8, .3, 1) both; animation-delay: var(--delay, 0s); }
+:root[data-theme="win95"] .win-load-anim { animation: win95Unroll .5s cubic-bezier(.4, 0, .2, 1) both; animation-delay: var(--delay, 0s); transform-origin: top center; }
+:root[data-theme="win95"] .win-load-anim .win-title-text { animation: titleType .6s steps(22, end) both; animation-delay: calc(var(--delay, 0s) + .2s); }
 
 .win-title-bar { background: var(--title-bg); color: var(--title-text); padding: 4px 6px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 13px; user-select: none; transition: background-color .35s ease; }
 .win-title-controls { display: flex; gap: 2px; }
 .win-window-body { padding: 1.5rem; }
 
 /* =========================================================
-   ПОЯВЛЕНИЕ КОНТЕНТА
+   ПОЯВЛЕНИЕ КОНТЕНТА (ИСПРАВЛЕНО)
 ========================================================= */
-.fade-up { animation: fadeUp .6s cubic-bezier(.2, .8, .3, 1) backwards; animation-delay: var(--delay, 0s); opacity: 0; }
-.fade-in { animation: fadeIn .8s ease backwards; animation-delay: var(--delay, 0s); opacity: 0; }
+.fade-up { animation: fadeUp .6s cubic-bezier(.2, .8, .3, 1) both; animation-delay: var(--delay, 0s); }
+.fade-in { animation: fadeIn .8s ease both; animation-delay: var(--delay, 0s); }
 
 .typewriter {
     display: inline-block; overflow: hidden; white-space: nowrap;
@@ -117,6 +117,7 @@ body {
     font-size: 2.2rem; margin-bottom: 10px;
     animation: typewriter 1.5s steps(20) 0.2s forwards, blinkCursor 0.8s step-end infinite;
     width: 0;
+    vertical-align: bottom;
 }
 
 /* =========================================================
@@ -204,7 +205,7 @@ body {
     padding: 10px;
     border-radius: 12px;
     overflow: hidden;
-    animation: videoPop 0.6s cubic-bezier(.2, .8, .3, 1) backwards;
+    animation: videoPop 0.6s cubic-bezier(.2, .8, .3, 1) both;
     animation-delay: calc(var(--i) * 0.1s + 0.5s);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
@@ -298,7 +299,7 @@ body {
    GITHUB REPOS
 ========================================================= */
 .github-repos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
-.repo-card { padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; animation: fadeUp .5s ease backwards; animation-delay: calc(var(--i) * .1s + 0.4s); transition: transform .25s ease, box-shadow .25s ease; }
+.repo-card { padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; animation: fadeUp .5s ease both; animation-delay: calc(var(--i) * .1s + 0.4s); transition: transform .25s ease, box-shadow .25s ease; }
 .repo-card:hover { transform: translateY(-4px); box-shadow: inset -1px -1px 0 var(--border-dark), inset 1px 1px 0 var(--border-light), 0 5px 15px rgba(0,0,0,.2); }
 .repo-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 .repo-icon { font-size: 1.5rem; }
