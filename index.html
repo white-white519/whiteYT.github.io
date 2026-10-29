@@ -174,6 +174,16 @@
 </footer>
 
 <script>
+    /* ============================================================
+       ⚙️ НАСТРОЙКИ
+    ============================================================ */
+    // Твоя ссылка от Cloudflare Worker
+    const YT_WORKER_URL = 'https://whiteyt-youtube-proxy.vas-vadim51.workers.dev';
+    const YT_CHANNEL_ID = 'UClRZ_X9qhqv14H53-g9qfrQ';
+
+    /* ============================================================
+       ТЕМЫ
+    ============================================================ */
     const THEME_KEY = 'whiteyt-theme';
     const AVAILABLE_THEMES = ['win95', 'dark', 'arch', 'vista'];
 
@@ -213,18 +223,27 @@
         })[ch]);
     }
 
+    /* ============================================================
+       YOUTUBE (ЧЕРЕЗ CLOUDFLARE WORKER)
+    ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
         if (!container) return;
+
         try {
-            const response = await fetch('youtube-videos.json');
-            if (!response.ok) throw new Error('Файл еще не создан');
+            const requestUrl = `${YT_WORKER_URL}/?channel_id=${YT_CHANNEL_ID}`;
+            const response = await fetch(requestUrl);
+
+            if (!response.ok) throw new Error('Ошибка сети');
             const videos = await response.json();
+
             if (!videos || videos.length === 0) throw new Error('Нет видео');
+
             let html = '';
             for (let i = 0; i < Math.min(videos.length, 7); i++) {
                 const video = videos[i];
                 const thumbnail = `https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`;
+
                 html += `
                     <div class="video-item win-inset" style="--i: ${i};">
                         <div class="video-thumbnail">
@@ -237,12 +256,13 @@
                 `;
             }
             container.innerHTML = html;
+
         } catch (err) {
             console.warn('YouTube Fetch error:', err);
             container.innerHTML = `
                 <div class="win-inset empty-state" style="grid-column: 1 / -1;">
-                    📺 Видео скоро появятся.<br>
-                    <small>GitHub Actions обновляет этот список каждые 6 часов.</small>
+                    📺 Не удалось загрузить видео.<br>
+                    <small>Проверьте подключение к интернету или обновите страницу.</small>
                     <br><br>
                     <a href="https://www.youtube.com/@HospitalwhiteYT" target="_blank" class="win-btn">Открыть YouTube</a>
                 </div>
@@ -250,6 +270,9 @@
         }
     }
 
+    /* ============================================================
+       GITHUB API
+    ============================================================ */
     const GH_USER = 'white-white519';
     const GH_CACHE_KEY = 'gh-repos-cache-v1';
     const GH_CACHE_TTL = 60 * 60 * 1000;
@@ -300,6 +323,9 @@
     }
     function refreshGitHubRepos() { try { sessionStorage.removeItem(GH_CACHE_KEY); } catch (e) {} loadGitHubRepos(); }
 
+    /* ============================================================
+       ARCH TERMINAL
+    ============================================================ */
     let termPath = '/';
     const termHistory = [];
     let termHistoryIdx = -1, terminalInitialized = false;
@@ -323,6 +349,9 @@
     function cmdTheme(args) { if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, dark, arch, vista', 'red'); setTheme(args[0], null); }
     function cmdNeofetch() { termPrint('    ██████╗ ███████╗██╗     ██╗   ██╗██╗   ██╗', 'green'); termPrint('    ██╔══██╗██╔════╝██║     ██║   ██║╚██╗ ██╔╝', 'green'); termPrint('    ██████╔╝█████╗  ██║     ██║   ██║ ╚████╔╝ ', 'green'); termPrint('    ██╔══██╗██╔══╝  ██║     ██║   ██║  ╚██╔╝  ', 'green'); termPrint('    ██████╔╝███████╗███████╗╚██████╔╝   ██║   ', 'green'); termPrint('    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ', 'green'); termPrint('    OS: БЕЛЫЙ OS v95', 'blue'); }
 
+    /* ============================================================
+       TASKBAR & INIT
+    ============================================================ */
     const windowRegistry = [];
     let winCounter = 0;
     function registerWindow(el) { const title = el.dataset.windowTitle || el.querySelector('.win-title-text')?.textContent || 'Window'; const id = 'w' + (++winCounter); el.dataset.windowId = id; windowRegistry.push({ id, el, title }); }
