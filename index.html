@@ -17,6 +17,7 @@
         <button class="win-btn active" data-theme-name="win95" aria-pressed="true"  onclick="setTheme('win95', this)">📟 Windows 95</button>
         <button class="win-btn"        data-theme-name="dark"  aria-pressed="false" onclick="setTheme('dark',  this)">🌌 Dark Neon</button>
         <button class="win-btn"        data-theme-name="arch"  aria-pressed="false" onclick="setTheme('arch',  this)">⌨️ Arch Terminal</button>
+        <button class="win-btn"        data-theme-name="vista" aria-pressed="false" onclick="setTheme('vista', this)">💎 Windows Vista</button>
     </div>
 </div>
 
@@ -68,7 +69,6 @@
         <h3 style="margin-bottom: 20px;">Характеристики персонажа 🎲:</h3>
 
         <div class="dnd-stats-grid">
-            <!-- Stat 1 -->
             <div class="dnd-stat-row">
                 <div class="dnd-stat-name">3D Рендеры <span class="dnd-stat-val">16 / 20</span></div>
                 <div class="dnd-pips">
@@ -79,8 +79,6 @@
                     <div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
                 </div>
             </div>
-
-            <!-- Stat 2 -->
             <div class="dnd-stat-row">
                 <div class="dnd-stat-name">Java (Minecraft Mods) <span class="dnd-stat-val">14 / 20</span></div>
                 <div class="dnd-pips">
@@ -91,8 +89,6 @@
                     <div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
                 </div>
             </div>
-
-            <!-- Stat 3 -->
             <div class="dnd-stat-row">
                 <div class="dnd-stat-name">Видеомонтаж / Стриминг <span class="dnd-stat-val">15 / 20</span></div>
                 <div class="dnd-pips">
@@ -119,7 +115,6 @@
     <div class="win-window-body">
         <h3 style="margin-bottom: 20px; text-align: center;">Последние видео с канала:</h3>
         <div class="youtube-circular-grid" id="youtube-feed">
-            <!-- Сюда будут загружаться видео -->
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
             <div class="video-skeleton"></div>
@@ -179,23 +174,18 @@
 </footer>
 
 <script>
-    /* ============================================================
-       ТЕМЫ
-    ============================================================ */
     const THEME_KEY = 'whiteyt-theme';
-    const AVAILABLE_THEMES = ['win95', 'dark', 'arch'];
+    const AVAILABLE_THEMES = ['win95', 'dark', 'arch', 'vista'];
 
     function setTheme(name, btn) {
         if (!AVAILABLE_THEMES.includes(name)) name = 'win95';
         document.documentElement.setAttribute('data-theme', name);
         try { localStorage.setItem(THEME_KEY, name); } catch (e) {}
-
         document.querySelectorAll('.theme-buttons .win-btn').forEach(b => {
             const isActive = b.dataset.themeName === name;
             b.classList.toggle('active', isActive);
             b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
-
         if (name === 'arch') {
             setTimeout(() => {
                 initTerminal();
@@ -208,7 +198,6 @@
         let saved = 'win95';
         try { saved = localStorage.getItem(THEME_KEY) || 'win95'; } catch (e) {}
         if (!AVAILABLE_THEMES.includes(saved)) saved = 'win95';
-
         document.documentElement.setAttribute('data-theme', saved);
         document.querySelectorAll('.theme-buttons .win-btn').forEach(b => {
             const isActive = b.dataset.themeName === saved;
@@ -218,34 +207,24 @@
         if (saved === 'arch') initTerminal();
     }
 
-    /* ============================================================
-       УТИЛИТЫ
-    ============================================================ */
     function escapeHtml(str) {
         return String(str ?? '').replace(/[&<>"']/g, ch => ({
             '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
         })[ch]);
     }
 
-    /* ============================================================
-       YOUTUBE (ИЗ ЛОКАЛЬНОГО JSON)
-    ============================================================ */
     async function loadYouTubeVideos() {
         const container = document.getElementById('youtube-feed');
         if (!container) return;
-
         try {
             const response = await fetch('youtube-videos.json');
-            if (!response.ok) throw new Error('Файл еще не создан или недоступен');
-
+            if (!response.ok) throw new Error('Файл еще не создан');
             const videos = await response.json();
             if (!videos || videos.length === 0) throw new Error('Нет видео');
-
             let html = '';
             for (let i = 0; i < Math.min(videos.length, 7); i++) {
                 const video = videos[i];
                 const thumbnail = `https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`;
-
                 html += `
                     <div class="video-item win-inset" style="--i: ${i};">
                         <div class="video-thumbnail">
@@ -258,7 +237,6 @@
                 `;
             }
             container.innerHTML = html;
-
         } catch (err) {
             console.warn('YouTube Fetch error:', err);
             container.innerHTML = `
@@ -272,29 +250,19 @@
         }
     }
 
-    /* ============================================================
-       GITHUB API
-    ============================================================ */
     const GH_USER = 'white-white519';
     const GH_CACHE_KEY = 'gh-repos-cache-v1';
     const GH_CACHE_TTL = 60 * 60 * 1000;
     const PINNED_REPOS = ['Soul_Fracture', 'Idea-app'];
-
-    const LANG_ICONS = {
-        'Java': '☕', 'JavaScript': '⚡', 'TypeScript': '🔷',
-        'HTML': '🌐', 'CSS': '🎨', 'Python': '🐍', 'C++': '🔧'
-    };
-
+    const LANG_ICONS = { 'Java': '☕', 'JavaScript': '⚡', 'TypeScript': '🔷', 'HTML': '🌐', 'CSS': '🎨', 'Python': '🐍', 'C++': '🔧' };
     const FALLBACK_REPOS = [
         { name: 'Soul_Fracture',  language: 'Java',       description: 'Мод на выживание в Minecraft...', html_url: '#' },
         { name: 'Idea-app',       language: 'JavaScript', description: 'ПО для стримеров (прототип)...', html_url: '#' }
     ];
-
     function renderRepoCard(repo, i) {
         const icon = LANG_ICONS[repo.language] || '📦';
         const desc = repo.description || 'Без описания';
-        const tagHtml = (repo.language ? `<span>${escapeHtml(repo.language)}</span>` : '')
-            + (repo.stargazers_count > 0 ? `<span>⭐ ${repo.stargazers_count}</span>` : '');
+        const tagHtml = (repo.language ? `<span>${escapeHtml(repo.language)}</span>` : '') + (repo.stargazers_count > 0 ? `<span>⭐ ${repo.stargazers_count}</span>` : '');
         return `
             <div class="repo-card win-inset" style="--i:${i};">
                 <div class="repo-header"><span class="repo-icon">${icon}</span><h4>${escapeHtml(repo.name)}</h4></div>
@@ -304,243 +272,69 @@
             </div>
         `;
     }
-
     function sortRepos(a, b) {
-        const aPinned = PINNED_REPOS.indexOf(a.name);
-        const bPinned = PINNED_REPOS.indexOf(b.name);
+        const aPinned = PINNED_REPOS.indexOf(a.name), bPinned = PINNED_REPOS.indexOf(b.name);
         if (aPinned !== -1 && bPinned === -1) return -1;
         if (aPinned === -1 && bPinned !== -1) return 1;
         if (aPinned !== -1 && bPinned !== -1) return aPinned - bPinned;
         return (b.stargazers_count - a.stargazers_count) || (new Date(b.updated_at) - new Date(a.updated_at));
     }
-
     async function loadGitHubRepos() {
         const container = document.getElementById('github-repos');
         if (!container) return;
         try {
             const cached = JSON.parse(sessionStorage.getItem(GH_CACHE_KEY) || 'null');
-            if (cached && (Date.now() - cached.ts) < GH_CACHE_TTL && cached.html) {
-                container.innerHTML = cached.html;
-                return;
-            }
+            if (cached && (Date.now() - cached.ts) < GH_CACHE_TTL && cached.html) { container.innerHTML = cached.html; return; }
         } catch (e) {}
-
         container.innerHTML = Array(4).fill(0).map((_, i) => `<div class="repo-card skeleton win-inset" style="--i:${i};"></div>`).join('');
-
         try {
             const res = await fetch(`https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100`);
             if (!res.ok) throw new Error('API Error');
             const repos = await res.json();
             const filtered = repos.filter(r => !r.fork && !r.archived).sort(sortRepos);
             if (!filtered.length) throw new Error('Empty');
-
             const html = filtered.map((r, i) => renderRepoCard(r, i)).join('');
             container.innerHTML = html;
             try { sessionStorage.setItem(GH_CACHE_KEY, JSON.stringify({ ts: Date.now(), html })); } catch (e) {}
-        } catch (err) {
-            container.innerHTML = FALLBACK_REPOS.map((r, i) => renderRepoCard(r, i)).join('');
-        }
+        } catch (err) { container.innerHTML = FALLBACK_REPOS.map((r, i) => renderRepoCard(r, i)).join(''); }
     }
-    function refreshGitHubRepos() {
-        try { sessionStorage.removeItem(GH_CACHE_KEY); } catch (e) {}
-        loadGitHubRepos();
-    }
+    function refreshGitHubRepos() { try { sessionStorage.removeItem(GH_CACHE_KEY); } catch (e) {} loadGitHubRepos(); }
 
-    /* ============================================================
-       ARCH TERMINAL
-    ============================================================ */
     let termPath = '/';
     const termHistory = [];
-    let termHistoryIdx = -1;
-    let terminalInitialized = false;
+    let termHistoryIdx = -1, terminalInitialized = false;
     const TERM_DIRS = ['/', '/portfolio', '/repos', '/upload'];
     const TERM_FILES = {
         '/bio.txt': `Имя: БЕЛЫЙ\nДР: 16 января (Козерог ♑)\nРоль: 3D-художник, рендермейкер\nСтатус: Если не злить — не укушу :3`,
         '/contacts.txt': `Telegram : https://t.me/podvalwhiteq\nYouTube  : https://www.youtube.com/@HospitalwhiteYT\nTwitch   : https://www.twitch.tv/whiteyt456`
     };
+    function termPrint(text, cls) { const out = document.getElementById('terminal-output'); if (!out) return; const line = document.createElement('div'); if (cls) line.className = 't-' + cls; line.textContent = text; out.appendChild(line); out.scrollTop = out.scrollHeight; }
+    function termPrintHTML(html) { const out = document.getElementById('terminal-output'); if (!out) return; const line = document.createElement('div'); line.innerHTML = html; out.appendChild(line); out.scrollTop = out.scrollHeight; }
+    function termClear() { const out = document.getElementById('terminal-output'); if (out) out.innerHTML = ''; }
+    function updateTermPrompt() { const el = document.getElementById('terminal-prompt'); if (!el) return; const displayPath = termPath === '/' ? '~' : '~' + termPath; el.textContent = `user@arch:${displayPath}$`; }
+    function printBanner() { termPrint(''); termPrint('  ╦ ╦╦╔╦╗╔═╗╦ ╦╔╦╗', 'blue'); termPrint('  ║║║║ ║ ║╣ ╚╦╝ ║ ', 'blue'); termPrint('  ╚╩╝╩ ╩ ╚═╝ ╩  ╩ ', 'blue'); termPrint(''); termPrint('  БЕЛЫЙ OS · Arch Terminal v1.0', 'green'); termPrint('  Type "help" for commands.', 'muted'); termPrint(''); }
+    function initTerminal() { if (terminalInitialized) return; terminalInitialized = true; const input = document.getElementById('terminal-input'); if (!input) return; input.addEventListener('keydown', handleTermKey); printBanner(); updateTermPrompt(); }
+    function handleTermKey(e) { if (e.key === 'Enter') { e.preventDefault(); const line = e.target.value; e.target.value = ''; termRun(line); } else if (e.key === 'ArrowUp') { e.preventDefault(); if (termHistoryIdx === -1) termHistoryIdx = termHistory.length; if (termHistoryIdx > 0) termHistoryIdx--; e.target.value = termHistory[termHistoryIdx] || ''; } else if (e.key === 'ArrowDown') { e.preventDefault(); if (termHistoryIdx < termHistory.length - 1) termHistoryIdx++; else termHistoryIdx = termHistory.length; e.target.value = termHistory[termHistoryIdx] || ''; } else if (e.key === 'l' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); termClear(); } }
+    function resolveTermPath(target) { if (!target || target === '~' || target === '/') return '/'; if (target === '..') { if (termPath === '/') return '/'; const parts = termPath.split('/').filter(Boolean); parts.pop(); return '/' + parts.join('/'); } if (target.startsWith('/')) return target; return (termPath === '/' ? '' : termPath) + '/' + target; }
+    function termRun(raw) { const line = String(raw || '').trim(); const displayPath = termPath === '/' ? '~' : '~' + termPath; termPrintHTML(`<span class="t-blue">user@arch</span>:<span class="t-yellow">${displayPath}</span>$ <span class="t-green">${escapeHtml(line)}</span>`); if (!line) return; termHistory.push(line); termHistoryIdx = termHistory.length; const parts = line.split(/\s+/); const cmd = parts[0].toLowerCase(); const args = parts.slice(1); switch (cmd) { case 'help': termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue'); break; case 'ls': cmdLs(args); break; case 'cd': cmdCd(args); break; case 'pwd': termPrint(termPath); break; case 'cat': cmdCat(args); break; case 'whoami': termPrint('БЕЛЫЙ', 'green'); termPrint('3D-художник · рендермейкер', 'muted'); break; case 'theme': cmdTheme(args); break; case 'clear': termClear(); break; case 'neofetch': cmdNeofetch(); break; case 'exit': setTimeout(() => setTheme('win95', null), 600); break; default: termPrint(`${cmd}: command not found. Type "help".`, 'red'); } }
+    function cmdLs(args) { const target = args[0] ? resolveTermPath(args[0]) : termPath; if (target === '/') { ['portfolio/','repos/','upload/','bio.txt','contacts.txt','README.md'].forEach(i => termPrint(`  ${i}`, i.endsWith('/') ? 'blue' : 'green')); } else if (target === '/portfolio') { termPrint('  (смотрите на сайте)', 'muted'); } else if (target === '/repos') { termPrint('  (смотрите на сайте)', 'muted'); } else if (target === '/upload') { termPrint('  submit.sh', 'green'); } else { termPrint(`ls: ${args[0]}: No such file`, 'red'); } }
+    function cmdCd(args) { if (!args.length) { termPath = '/'; updateTermPrompt(); return; } const newPath = resolveTermPath(args[0]); if (TERM_DIRS.includes(newPath)) { termPath = newPath; updateTermPrompt(); } else { termPrint(`cd: ${args[0]}: No such directory`, 'red'); } }
+    function cmdCat(args) { if (!args.length) return termPrint('cat: missing filename', 'red'); const content = TERM_FILES[resolveTermPath(args[0])]; if (content) content.split('\n').forEach(l => termPrint(l)); else termPrint(`cat: ${args[0]}: No such file`, 'red'); }
+    function cmdTheme(args) { if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, dark, arch, vista', 'red'); setTheme(args[0], null); }
+    function cmdNeofetch() { termPrint('    ██████╗ ███████╗██╗     ██╗   ██╗██╗   ██╗', 'green'); termPrint('    ██╔══██╗██╔════╝██║     ██║   ██║╚██╗ ██╔╝', 'green'); termPrint('    ██████╔╝█████╗  ██║     ██║   ██║ ╚████╔╝ ', 'green'); termPrint('    ██╔══██╗██╔══╝  ██║     ██║   ██║  ╚██╔╝  ', 'green'); termPrint('    ██████╔╝███████╗███████╗╚██████╔╝   ██║   ', 'green'); termPrint('    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ', 'green'); termPrint('    OS: БЕЛЫЙ OS v95', 'blue'); }
 
-    function termPrint(text, cls) {
-        const out = document.getElementById('terminal-output');
-        if (!out) return;
-        const line = document.createElement('div');
-        if (cls) line.className = 't-' + cls;
-        line.textContent = text;
-        out.appendChild(line);
-        out.scrollTop = out.scrollHeight;
-    }
-    function termPrintHTML(html) {
-        const out = document.getElementById('terminal-output');
-        if (!out) return;
-        const line = document.createElement('div');
-        line.innerHTML = html;
-        out.appendChild(line);
-        out.scrollTop = out.scrollHeight;
-    }
-    function termClear() {
-        const out = document.getElementById('terminal-output');
-        if (out) out.innerHTML = '';
-    }
-    function updateTermPrompt() {
-        const el = document.getElementById('terminal-prompt');
-        if (!el) return;
-        const displayPath = termPath === '/' ? '~' : '~' + termPath;
-        el.textContent = `user@arch:${displayPath}$`;
-    }
-    function printBanner() {
-        termPrint('');
-        termPrint('  ╦ ╦╦╔╦╗╔═╗╦ ╦╔╦╗', 'blue');
-        termPrint('  ║║║║ ║ ║╣ ╚╦╝ ║ ', 'blue');
-        termPrint('  ╚╩╝╩ ╩ ╚═╝ ╩  ╩ ', 'blue');
-        termPrint('');
-        termPrint('  БЕЛЫЙ OS · Arch Terminal v1.0', 'green');
-        termPrint('  Type "help" for commands.', 'muted');
-        termPrint('');
-    }
-    function initTerminal() {
-        if (terminalInitialized) return;
-        terminalInitialized = true;
-        const input = document.getElementById('terminal-input');
-        if (!input) return;
-        input.addEventListener('keydown', handleTermKey);
-        printBanner();
-        updateTermPrompt();
-    }
-    function handleTermKey(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const line = e.target.value;
-            e.target.value = '';
-            termRun(line);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            if (termHistoryIdx === -1) termHistoryIdx = termHistory.length;
-            if (termHistoryIdx > 0) termHistoryIdx--;
-            e.target.value = termHistory[termHistoryIdx] || '';
-        } else if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            if (termHistoryIdx < termHistory.length - 1) termHistoryIdx++;
-            else termHistoryIdx = termHistory.length;
-            e.target.value = termHistory[termHistoryIdx] || '';
-        } else if (e.key === 'l' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            termClear();
-        }
-    }
-    function resolveTermPath(target) {
-        if (!target || target === '~' || target === '/') return '/';
-        if (target === '..') {
-            if (termPath === '/') return '/';
-            const parts = termPath.split('/').filter(Boolean);
-            parts.pop();
-            return '/' + parts.join('/');
-        }
-        if (target.startsWith('/')) return target;
-        return (termPath === '/' ? '' : termPath) + '/' + target;
-    }
-    function termRun(raw) {
-        const line = String(raw || '').trim();
-        const displayPath = termPath === '/' ? '~' : '~' + termPath;
-        termPrintHTML(`<span class="t-blue">user@arch</span>:<span class="t-yellow">${displayPath}</span>$ <span class="t-green">${escapeHtml(line)}</span>`);
-        if (!line) return;
-        termHistory.push(line);
-        termHistoryIdx = termHistory.length;
-
-        const parts = line.split(/\s+/);
-        const cmd = parts[0].toLowerCase();
-        const args = parts.slice(1);
-
-        switch (cmd) {
-            case 'help':      termPrint('Доступно: help, ls, cd, cat, whoami, theme, clear, neofetch, exit', 'blue'); break;
-            case 'ls':        cmdLs(args); break;
-            case 'cd':        cmdCd(args); break;
-            case 'pwd':       termPrint(termPath); break;
-            case 'cat':       cmdCat(args); break;
-            case 'whoami':    termPrint('БЕЛЫЙ', 'green'); termPrint('3D-художник · рендермейкер', 'muted'); break;
-            case 'theme':     cmdTheme(args); break;
-            case 'clear':     termClear(); break;
-            case 'neofetch':  cmdNeofetch(); break;
-            case 'exit':      setTimeout(() => setTheme('win95', null), 600); break;
-            default:          termPrint(`${cmd}: command not found. Type "help".`, 'red');
-        }
-    }
-    function cmdLs(args) {
-        const target = args[0] ? resolveTermPath(args[0]) : termPath;
-        if (target === '/') {
-            ['portfolio/','repos/','upload/','bio.txt','contacts.txt','README.md'].forEach(i => termPrint(`  ${i}`, i.endsWith('/') ? 'blue' : 'green'));
-        } else if (target === '/portfolio') { termPrint('  (смотрите на сайте)', 'muted');
-        } else if (target === '/repos') { termPrint('  (смотрите на сайте)', 'muted');
-        } else if (target === '/upload') { termPrint('  submit.sh', 'green');
-        } else { termPrint(`ls: ${args[0]}: No such file`, 'red'); }
-    }
-    function cmdCd(args) {
-        if (!args.length) { termPath = '/'; updateTermPrompt(); return; }
-        const newPath = resolveTermPath(args[0]);
-        if (TERM_DIRS.includes(newPath)) { termPath = newPath; updateTermPrompt(); }
-        else { termPrint(`cd: ${args[0]}: No such directory`, 'red'); }
-    }
-    function cmdCat(args) {
-        if (!args.length) return termPrint('cat: missing filename', 'red');
-        const content = TERM_FILES[resolveTermPath(args[0])];
-        if (content) content.split('\n').forEach(l => termPrint(l));
-        else termPrint(`cat: ${args[0]}: No such file`, 'red');
-    }
-    function cmdTheme(args) {
-        if (!AVAILABLE_THEMES.includes(args[0])) return termPrint('Темы: win95, dark, arch', 'red');
-        setTheme(args[0], null);
-    }
-    function cmdNeofetch() {
-        termPrint('    ██████╗ ███████╗██╗     ██╗   ██╗██╗   ██╗', 'green');
-        termPrint('    ██╔══██╗██╔════╝██║     ██║   ██║╚██╗ ██╔╝', 'green');
-        termPrint('    ██████╔╝█████╗  ██║     ██║   ██║ ╚████╔╝ ', 'green');
-        termPrint('    ██╔══██╗██╔══╝  ██║     ██║   ██║  ╚██╔╝  ', 'green');
-        termPrint('    ██████╔╝███████╗███████╗╚██████╔╝   ██║   ', 'green');
-        termPrint('    ╚═════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ', 'green');
-        termPrint('    OS: БЕЛЫЙ OS v95', 'blue');
-    }
-
-    /* ============================================================
-       TASKBAR & INIT
-    ============================================================ */
     const windowRegistry = [];
     let winCounter = 0;
-
-    function registerWindow(el) {
-        const title = el.dataset.windowTitle || el.querySelector('.win-title-text')?.textContent || 'Window';
-        const id = 'w' + (++winCounter);
-        el.dataset.windowId = id;
-        windowRegistry.push({ id, el, title });
-    }
-    function renderTaskbar() {
-        const container = document.getElementById('taskbarItems');
-        if (!container) return;
-        container.innerHTML = windowRegistry.map(w => {
-            const hidden = w.el.style.display === 'none';
-            return `<button class="win-btn taskbar-item ${hidden ? 'inactive' : 'active'}" data-target="${w.id}" title="${escapeHtml(w.title)}">${escapeHtml(w.title)}</button>`;
-        }).join('');
-        container.querySelectorAll('.taskbar-item').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const w = windowRegistry.find(x => x.id === btn.dataset.target);
-                if (!w) return;
-                w.el.style.display = (w.el.style.display === 'none') ? '' : 'none';
-                renderTaskbar();
-            });
-        });
-    }
+    function registerWindow(el) { const title = el.dataset.windowTitle || el.querySelector('.win-title-text')?.textContent || 'Window'; const id = 'w' + (++winCounter); el.dataset.windowId = id; windowRegistry.push({ id, el, title }); }
+    function renderTaskbar() { const container = document.getElementById('taskbarItems'); if (!container) return; container.innerHTML = windowRegistry.map(w => { const hidden = w.el.style.display === 'none'; return `<button class="win-btn taskbar-item ${hidden ? 'inactive' : 'active'}" data-target="${w.id}" title="${escapeHtml(w.title)}">${escapeHtml(w.title)}</button>`; }).join(''); container.querySelectorAll('.taskbar-item').forEach(btn => { btn.addEventListener('click', () => { const w = windowRegistry.find(x => x.id === btn.dataset.target); if (!w) return; w.el.style.display = (w.el.style.display === 'none') ? '' : 'none'; renderTaskbar(); }); }); }
     function minimizeWindow(el) { el.style.display = 'none'; renderTaskbar(); }
     function restoreAllWindows() { windowRegistry.forEach(w => { w.el.style.display = ''; }); renderTaskbar(); }
-
-    function updateClock() {
-        const el = document.getElementById('taskbarClock');
-        if (!el) return;
-        const d = new Date();
-        el.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-    }
+    function updateClock() { const el = document.getElementById('taskbarClock'); if (!el) return; const d = new Date(); el.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 
     document.addEventListener('DOMContentLoaded', () => {
         restoreTheme();
         document.querySelectorAll('.win-window[data-window-title]').forEach(registerWindow);
         renderTaskbar();
-
         loadYouTubeVideos();
         loadGitHubRepos();
         initTerminal();
